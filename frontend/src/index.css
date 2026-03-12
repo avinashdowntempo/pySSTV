@@ -1,0 +1,60 @@
+/* ---- Global CSS Custom Properties ---- */
+:root {
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --accent: #6366f1;
+  --accent-bg: rgba(99, 102, 241, 0.1);
+
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+
+  font: 16px/1.5 var(--sans);
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #f3f4f6;
+    --text-muted: #9ca3af;
+    --bg: #111827;
+    --surface: #1f2937;
+    --border: #374151;
+    --accent: #818cf8;
+    --accent-bg: rgba(129, 140, 248, 0.15);
+  }
+}
+
+/* ---- Reset ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button,
+select,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--accent);
+}

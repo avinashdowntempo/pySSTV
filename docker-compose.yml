@@ -1,0 +1,41 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - MAX_UPLOAD_SIZE_MB=${MAX_UPLOAD_SIZE_MB:-10}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    expose:
+      - "8000"
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /app/server
+        - action: sync
+          path: ./pysstv
+          target: /app/pysstv
+        - action: rebuild
+          path: ./requirements.txt
+        - action: rebuild
+          path: ./server/requirements.txt
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-3000}:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend/src
+        - action: rebuild
+          path: ./frontend/package.json
+        - action: rebuild
+          path: ./frontend/vite.config.ts

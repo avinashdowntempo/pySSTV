@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" width="480" height="160">
+  <defs>
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Image frame icon -->
+  <rect x="20" y="32" width="96" height="96" rx="12" fill="none" stroke="url(#iconGrad)" stroke-width="5"/>
+  <!-- Mountain / landscape inside frame -->
+  <polygon points="32,108 56,68 72,88 88,58 104,108" fill="url(#iconGrad)" opacity="0.25"/>
+  <polygon points="32,108 56,68 72,88 88,58 104,108" fill="none" stroke="url(#iconGrad)" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Sun -->
+  <circle cx="90" cy="52" r="10" fill="url(#iconGrad)" opacity="0.5"/>
+
+  <!-- Broadcast waves emanating from frame -->
+  <path d="M122,60 Q132,48 122,36" fill="none" stroke="url(#waveGrad)" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+  <path d="M130,66 Q144,46 130,26" fill="none" stroke="url(#waveGrad)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+  <path d="M138,72 Q156,44 138,16" fill="none" stroke="url(#waveGrad)" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Title text -->
+  <text x="152" y="90" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-weight="800" font-size="62" fill="url(#waveGrad)" letter-spacing="-1">
+    Wave<tspan fill="#f8fafc">Pix</tspan>
+  </text>
+
+  <!-- Sine wave underline -->
+  <path d="M152,104 Q176,92 200,104 Q224,116 248,104 Q272,92 296,104 Q320,116 344,104 Q368,92 392,104 Q416,116 440,104"
+        fill="none" stroke="url(#waveGrad)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Tagline -->
+  <text x="152" y="132" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-weight="400" font-size="16" fill="#94a3b8" letter-spacing="3">
+    IMAGES → RADIO WAVES
+  </text>
+</svg>
