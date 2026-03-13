@@ -16,7 +16,8 @@
 
 .logo {
   width: min(100%, 360px);
-  height: auto;
+  max-height: 200px;
+  object-fit: contain;
 }
 
 .nav {

@@ -40,7 +40,7 @@ export default function App() {
     <div className={styles.app}>
       <header className={styles.header}>
         <RadioWaves active={audioState.isPlaying} />
-        <img src="/logo.svg" alt="WavePix" className={styles.logo} />
+        <img src="/logo.png" alt="WavePix" className={styles.logo} />
         <RadioWaves active={audioState.isPlaying} />
       </header>
 

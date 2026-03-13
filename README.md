@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.svg" alt="WavePix" width="480"/>
+  <img src="frontend/public/logo.png" alt="WavePix" width="480"/>
 </p>
 
 <h1 align="center">WavePix</h1>
