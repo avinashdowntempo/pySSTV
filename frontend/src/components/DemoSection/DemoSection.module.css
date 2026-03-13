@@ -1,6 +1,8 @@
 /* ---- Section ---- */
 .section {
   text-align: center;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .heading {

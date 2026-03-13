@@ -59,11 +59,15 @@ export default function App() {
 
       <UploadForm onSubmit={addJobs} />
 
-      <DemoSection
-        currentUrl={audioState.currentUrl}
-        isPlaying={audioState.isPlaying}
-        onPlay={audioControls.play}
-      />
+      <div
+        className={`${styles.demoWrap} ${jobs.length > 0 ? styles.demoHidden : ""}`}
+      >
+        <DemoSection
+          currentUrl={audioState.currentUrl}
+          isPlaying={audioState.isPlaying}
+          onPlay={audioControls.play}
+        />
+      </div>
 
       <BatchList
         jobs={jobs}

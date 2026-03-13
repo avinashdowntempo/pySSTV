@@ -46,3 +46,20 @@
   bottom: 1rem;
   z-index: 10;
 }
+
+/* ---- Demo section show/hide ---- */
+.demoWrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows 0.35s ease,
+    opacity 0.25s ease;
+}
+
+.demoHidden {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
