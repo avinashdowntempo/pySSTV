@@ -5,6 +5,7 @@ import { UploadForm } from "./components/UploadForm";
 import { AudioPlayer } from "./components/AudioPlayer";
 import { BatchList } from "./components/BatchList";
 import { DemoSection } from "./components/DemoSection";
+import { HowToUse } from "./components/HowToUse";
 import { RadioWaves } from "./components/RadioWaves";
 import styles from "./App.module.css";
 
@@ -38,6 +39,8 @@ export default function App() {
         isPlaying={audioState.isPlaying}
         onPlay={audioControls.play}
       />
+
+      <HowToUse />
 
       <BatchList
         jobs={jobs}
