@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchModes } from "../../api/sstv";
+import { ModeLegend } from "../ModeLegend";
 import styles from "./UploadForm.module.css";
 
 interface Props {
@@ -104,6 +105,8 @@ export default function UploadForm({ onSubmit }: Props) {
           Convert {files.length > 1 ? `(${files.length})` : ""}
         </button>
       </div>
+
+      <ModeLegend selectedMode={selectedMode} />
     </div>
   );
 }

@@ -1,0 +1,80 @@
+.legend {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.toggle:hover {
+  border-color: var(--accent);
+}
+
+.icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.chevron {
+  margin-left: auto;
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.table {
+  margin-top: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.8rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 0.35rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.headerRow {
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--accent-bg);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.active {
+  background: var(--accent-bg);
+  font-weight: 600;
+}
+
+.modeName {
+  color: var(--text);
+}
+
+.resolution {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
