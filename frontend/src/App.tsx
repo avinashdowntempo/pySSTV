@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useAudioPlayer } from "./hooks/useAudioPlayer";
 import { useConversionQueue } from "./hooks/useConversionQueue";
 import { UploadForm } from "./components/UploadForm";
@@ -12,6 +12,7 @@ import styles from "./App.module.css";
 export default function App() {
   const [audioState, audioControls] = useAudioPlayer();
   const { jobs, addJobs, removeJob, clearCompleted } = useConversionQueue();
+  const [page, setPage] = useState<"home" | "guide">("home");
 
   const handleNext = useCallback(() => {
     const doneJobs = jobs.filter((j) => j.status === "done" && j.wavUrl);
@@ -24,6 +25,17 @@ export default function App() {
     audioControls.play(doneJobs[nextIdx].wavUrl!);
   }, [jobs, audioState.currentUrl, audioControls]);
 
+  if (page === "guide") {
+    return (
+      <HowToUse
+        onBack={() => {
+          setPage("home");
+          window.scrollTo(0, 0);
+        }}
+      />
+    );
+  }
+
   return (
     <div className={styles.app}>
       <header className={styles.header}>
@@ -32,6 +44,19 @@ export default function App() {
         <RadioWaves active={audioState.isPlaying} />
       </header>
 
+      <nav className={styles.nav}>
+        <button
+          type="button"
+          className={styles.guideLink}
+          onClick={() => {
+            setPage("guide");
+            window.scrollTo(0, 0);
+          }}
+        >
+          📖 How to use
+        </button>
+      </nav>
+
       <UploadForm onSubmit={addJobs} />
 
       <DemoSection
@@ -39,8 +64,6 @@ export default function App() {
         isPlaying={audioState.isPlaying}
         onPlay={audioControls.play}
       />
-
-      <HowToUse />
 
       <BatchList
         jobs={jobs}

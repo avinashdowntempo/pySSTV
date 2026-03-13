@@ -1,55 +1,58 @@
-/* ---- Section ---- */
-.section {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface);
-  overflow: hidden;
+/* ---- Page layout ---- */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
 }
 
-/* ---- Toggle ---- */
-.toggle {
-  display: flex;
+/* ---- Back button ---- */
+.backBtn,
+.backBtnBottom {
+  display: inline-flex;
   align-items: center;
-  width: 100%;
-  padding: 0.75rem 1rem;
+  gap: 0.25rem;
+  padding: 0;
   border: none;
   background: none;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
-  text-align: left;
-  gap: 0.5rem;
-  transition: background 0.15s;
+  transition: opacity 0.15s;
 }
 
-.toggle:hover {
-  background: var(--accent-bg);
+.backBtn:hover,
+.backBtnBottom:hover {
+  opacity: 0.7;
 }
 
-.heading {
-  font-size: 0.9rem;
-  font-weight: 600;
+.backBtnBottom {
+  margin-top: 2rem;
+}
+
+/* ---- Page header ---- */
+.pageTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
   color: var(--text);
+  margin-top: 1rem;
 }
 
-.chevron {
-  margin-left: auto;
-  font-size: 0.75rem;
+.pageSubtitle {
+  font-size: 0.88rem;
   color: var(--text-muted);
-  transition: transform 0.2s;
-}
-
-.chevronOpen {
-  transform: rotate(180deg);
-}
-
-/* ---- Content ---- */
-.content {
-  padding: 0 1.25rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  margin-top: 0.35rem;
+  line-height: 1.5;
 }
 
 /* ---- Steps ---- */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+}
+
 .step {
   display: flex;
   gap: 0.75rem;
@@ -58,37 +61,37 @@
 
 .stepNum {
   flex-shrink: 0;
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.8rem;
+  height: 1.8rem;
   border-radius: 50%;
   background: var(--accent);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.1rem;
+  margin-top: 0.05rem;
 }
 
 .stepTitle {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 
 .stepText {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 /* ---- App list ---- */
 .appList {
-  margin: 0.4rem 0 0;
+  margin: 0.5rem 0 0;
   padding-left: 1.1rem;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   line-height: 1.7;
 }
@@ -96,7 +99,7 @@
 .tag {
   display: inline-block;
   margin-left: 0.4rem;
-  padding: 0.05rem 0.4rem;
+  padding: 0.1rem 0.45rem;
   border-radius: 4px;
   background: var(--accent-bg);
   color: var(--accent);
@@ -110,36 +113,41 @@
 /* ---- Tips ---- */
 .tips {
   border-top: 1px solid var(--border);
-  padding-top: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
 }
 
 .tipsTitle {
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
 .tipsList {
   margin: 0;
   padding-left: 1.1rem;
-  font-size: 0.8rem;
+  font-size: 0.83rem;
   color: var(--text-muted);
   line-height: 1.6;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
 /* ---- Responsive ---- */
 @media (max-width: 480px) {
-  .content {
-    padding: 0 0.75rem 1rem;
+  .page {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .pageTitle {
+    font-size: 1.15rem;
   }
 
   .stepNum {
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 1.5rem;
+    height: 1.5rem;
     font-size: 0.7rem;
   }
 }

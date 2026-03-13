@@ -194,7 +194,7 @@ A React-based single-page app lives in `frontend/`. It provides a visual interfa
 - **Mode picker** — populated from the server's `/modes` endpoint
 - **Mode legend** — inline info hint showing the recommended upload resolution for the selected mode; expands to a full reference table of all 19 modes
 - **Demo samples** — five pre-converted image/audio pairs so users can preview SSTV output instantly without hitting the server
-- **How-to-use guide** — collapsible step-by-step instructions for decoding SSTV audio with Robot36 and other apps
+- **How-to-use guide** — dedicated page with step-by-step instructions for decoding SSTV audio with Robot36 and other apps, accessible via a visible link in the header
 - **Batch conversion queue** — jobs are processed sequentially; status badges show pending / converting / transmit / error
 - **Built-in audio player** — play, pause, stop, seek, and "next" controls; only one track plays at a time
 - **Animated radio waves** — SVG broadcast animation in the header pulses when audio is transmitting

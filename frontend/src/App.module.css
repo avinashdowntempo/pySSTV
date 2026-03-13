@@ -19,6 +19,28 @@
   height: auto;
 }
 
+.nav {
+  display: flex;
+  justify-content: center;
+  margin-top: -0.75rem;
+}
+
+.guideLink {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+
+.guideLink:hover {
+  opacity: 1;
+}
+
 .playerSticky {
   position: sticky;
   bottom: 1rem;
