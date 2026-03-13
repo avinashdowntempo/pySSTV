@@ -42,11 +42,10 @@ export default function ModeLegend({ selectedMode }: Props) {
         <span className={styles.icon}>ℹ️</span>
         {current ? (
           <span>
-            <strong>{selectedMode}</strong> — {current.width} × {current.height}
-            px
+            Recommended upload: {current.width} × {current.height} px
           </span>
         ) : (
-          <span>Mode resolutions</span>
+          <span>View recommended resolutions</span>
         )}
         <span className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}>
           ▾

@@ -1,25 +1,25 @@
 .legend {
-  margin-top: 1rem;
-  text-align: left;
+  margin-top: 0.25rem;
+  text-align: center;
 }
 
 .toggle {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
+  gap: 0.35rem;
+  padding: 0;
+  border: none;
+  background: none;
   color: var(--text-muted);
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  transition: border-color 0.15s;
+  opacity: 0.7;
+  transition: opacity 0.15s;
 }
 
 .toggle:hover {
-  border-color: var(--accent);
+  opacity: 1;
+  color: var(--accent);
 }
 
 .icon {

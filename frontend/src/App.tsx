@@ -4,6 +4,7 @@ import { useConversionQueue } from "./hooks/useConversionQueue";
 import { UploadForm } from "./components/UploadForm";
 import { AudioPlayer } from "./components/AudioPlayer";
 import { BatchList } from "./components/BatchList";
+import { DemoSection } from "./components/DemoSection";
 import { RadioWaves } from "./components/RadioWaves";
 import styles from "./App.module.css";
 
@@ -31,6 +32,12 @@ export default function App() {
       </header>
 
       <UploadForm onSubmit={addJobs} />
+
+      <DemoSection
+        currentUrl={audioState.currentUrl}
+        isPlaying={audioState.isPlaying}
+        onPlay={audioControls.play}
+      />
 
       <BatchList
         jobs={jobs}

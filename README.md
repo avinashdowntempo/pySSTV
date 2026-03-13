@@ -192,6 +192,8 @@ A React-based single-page app lives in `frontend/`. It provides a visual interfa
 
 - **Drag-and-drop** (or click-to-browse) multi-image upload
 - **Mode picker** — populated from the server's `/modes` endpoint
+- **Mode legend** — inline info hint showing the recommended upload resolution for the selected mode; expands to a full reference table of all 19 modes
+- **Demo samples** — five pre-converted image/audio pairs so users can preview SSTV output instantly without hitting the server
 - **Batch conversion queue** — jobs are processed sequentially; status badges show pending / converting / transmit / error
 - **Built-in audio player** — play, pause, stop, seek, and "next" controls; only one track plays at a time
 - **Animated radio waves** — SVG broadcast animation in the header pulses when audio is transmitting
@@ -216,14 +218,36 @@ Open http://localhost:5173. The Vite dev server proxies `/api` requests to the F
 
 The output in `frontend/dist/` can be served by any static file server (Nginx, Caddy, etc.). Point the `/api` route to the backend with a reverse proxy.
 
+### Recommended upload resolutions
+
+For a 1:1 pixel mapping (no scaling artifacts), upload images at the native size of the chosen mode:
+
+| Mode                                                             | Resolution |
+| ---------------------------------------------------------------- | ---------- |
+| MartinM1, ScottieS1, ScottieDX, PD90, WraaseSC2120, WraaseSC2180 | 320 × 256  |
+| MartinM2, ScottieS2                                              | 160 × 256  |
+| Robot36, Robot24BW                                               | 320 × 240  |
+| Robot8BW                                                         | 160 × 120  |
+| PasokonP3, PasokonP5, PasokonP7, PD120, PD180, PD240             | 640 × 496  |
+| PD160                                                            | 512 × 400  |
+| PD290                                                            | 800 × 616  |
+
+> **Note:** If `resize` is enabled (the default), images are automatically scaled to fit. The table above is for users who want pixel-perfect output.
+
 ### Project structure
 
     frontend/
+    ├── public/
+    │   ├── demo_audio/     # Pre-converted MP3 demo samples
+    │   ├── demo_thumbs/    # Optimized WebP thumbnails for demos
+    │   └── test_images/    # Original test PNG images
     ├── src/
     │   ├── api/           # API client (fetchModes, convertImage)
     │   ├── components/
     │   │   ├── AudioPlayer/   # Play/pause/stop/seek controls
     │   │   ├── BatchList/     # Conversion job list with status & actions
+    │   │   ├── DemoSection/   # Pre-converted sample image/audio pairs
+    │   │   ├── ModeLegend/    # Collapsible mode resolution reference
     │   │   ├── RadioWaves/    # Animated SVG broadcast indicator
     │   │   └── UploadForm/    # Drag-and-drop image upload + mode picker
     │   ├── hooks/
