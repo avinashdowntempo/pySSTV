@@ -50,20 +50,18 @@ export default function AudioPlayer({ state, controls, onNext }: Props) {
         )}
       </div>
 
-      <div className={styles.progress}>
-        <input
-          className={styles.bar}
-          type="range"
-          min={0}
-          max={state.duration || 0}
-          step={0.1}
-          value={state.currentTime}
-          onChange={(e) => controls.seek(Number(e.target.value))}
-        />
-        <div className={styles.time}>
-          <span>{formatTime(state.currentTime)}</span>
-          <span>{formatTime(state.duration)}</span>
-        </div>
+      <input
+        className={styles.bar}
+        type="range"
+        min={0}
+        max={state.duration || 0}
+        step={0.1}
+        value={state.currentTime}
+        onChange={(e) => controls.seek(Number(e.target.value))}
+      />
+      <div className={styles.time}>
+        <span>{formatTime(state.currentTime)}</span>
+        <span>{formatTime(state.duration)}</span>
       </div>
     </div>
   );
