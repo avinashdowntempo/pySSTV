@@ -86,3 +86,108 @@
   font-size: 0.85rem;
   color: var(--text-muted);
 }
+
+/* ---- Preview Section ---- */
+.previewSection {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.clearAllBtn {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.clearAllBtn:hover {
+  color: #ef4444;
+}
+
+/* ---- Thumbnail Grid ---- */
+.thumbGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 0.5rem;
+}
+
+.thumbCard {
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--bg);
+  transition: border-color 0.15s;
+}
+
+.thumbCard:hover {
+  border-color: var(--accent);
+}
+
+.thumbImg {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.65rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
+}
+
+.thumbCard:hover .removeBtn {
+  opacity: 1;
+}
+
+.removeBtn:hover {
+  background: #ef4444;
+}
+
+.thumbName {
+  display: block;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Mobile: always show remove button ---- */
+@media (max-width: 480px) {
+  .thumbGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .removeBtn {
+    opacity: 1;
+  }
+}

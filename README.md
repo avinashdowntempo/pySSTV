@@ -190,7 +190,7 @@ A React-based single-page app lives in `frontend/`. It provides a visual interfa
 
 ### Features
 
-- **Drag-and-drop** (or click-to-browse) multi-image upload
+- **Drag-and-drop** (or click-to-browse) multi-image upload with thumbnail previews, per-image remove, and a max of 10 images
 - **Mode picker** — populated from the server's `/modes` endpoint
 - **Mode legend** — inline info hint showing the recommended upload resolution for the selected mode; expands to a full reference table of all 19 modes
 - **Demo samples** — five pre-converted image/audio pairs so users can preview SSTV output instantly without hitting the server

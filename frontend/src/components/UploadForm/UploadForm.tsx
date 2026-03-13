@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { fetchModes } from "../../api/sstv";
 import { ModeLegend } from "../ModeLegend";
 import styles from "./UploadForm.module.css";
@@ -9,6 +9,7 @@ interface Props {
 
 const ACCEPTED =
   "image/jpeg,image/png,image/gif,image/bmp,image/tiff,image/webp";
+const MAX_FILES = 10;
 
 export default function UploadForm({ onSubmit }: Props) {
   const [modes, setModes] = useState<string[]>([]);
@@ -26,12 +27,29 @@ export default function UploadForm({ onSubmit }: Props) {
       .catch(() => setModes(["MartinM1", "ScottieS1", "Robot36"]));
   }, []);
 
+  // Create stable object URLs for thumbnails, revoke on cleanup
+  const previews = useMemo(
+    () => files.map((f) => URL.createObjectURL(f)),
+    [files],
+  );
+  useEffect(() => {
+    return () => previews.forEach((url) => URL.revokeObjectURL(url));
+  }, [previews]);
+
   const addFiles = useCallback((incoming: FileList | null) => {
     if (!incoming) return;
     const valid = Array.from(incoming).filter((f) =>
       f.type.startsWith("image/"),
     );
-    setFiles((prev) => [...prev, ...valid]);
+    setFiles((prev) => {
+      const remaining = MAX_FILES - prev.length;
+      if (remaining <= 0) return prev;
+      return [...prev, ...valid.slice(0, remaining)];
+    });
+  }, []);
+
+  const removeFile = useCallback((index: number) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
   const handleDrop = useCallback(
@@ -50,6 +68,8 @@ export default function UploadForm({ onSubmit }: Props) {
     if (inputRef.current) inputRef.current.value = "";
   };
 
+  const atLimit = files.length >= MAX_FILES;
+
   return (
     <div
       className={`${styles.uploadForm} ${dragOver ? styles.dragOver : ""}`}
@@ -62,11 +82,17 @@ export default function UploadForm({ onSubmit }: Props) {
     >
       <div
         className={styles.dropZone}
-        onClick={() => inputRef.current?.click()}
+        onClick={() => !atLimit && inputRef.current?.click()}
       >
         <div className={styles.dropIcon}>📷</div>
         <p className={styles.dropText}>
-          Drag & drop images here or <strong>browse</strong>
+          {atLimit ? (
+            <span>Maximum {MAX_FILES} images reached</span>
+          ) : (
+            <>
+              Drag & drop images here or <strong>browse</strong>
+            </>
+          )}
         </p>
         <input
           ref={inputRef}
@@ -79,9 +105,48 @@ export default function UploadForm({ onSubmit }: Props) {
       </div>
 
       {files.length > 0 && (
-        <span className={styles.fileCount}>
-          {files.length} file{files.length !== 1 ? "s" : ""} selected
-        </span>
+        <div className={styles.previewSection}>
+          <div className={styles.previewHeader}>
+            <span className={styles.fileCount}>
+              {files.length} / {MAX_FILES} image{files.length !== 1 ? "s" : ""}
+            </span>
+            <button
+              type="button"
+              className={styles.clearAllBtn}
+              onClick={() => {
+                setFiles([]);
+                if (inputRef.current) inputRef.current.value = "";
+              }}
+            >
+              Clear all
+            </button>
+          </div>
+          <div className={styles.thumbGrid}>
+            {files.map((file, i) => (
+              <div
+                key={`${file.name}-${file.size}-${i}`}
+                className={styles.thumbCard}
+              >
+                <img
+                  src={previews[i]}
+                  alt={file.name}
+                  className={styles.thumbImg}
+                />
+                <button
+                  type="button"
+                  className={styles.removeBtn}
+                  onClick={() => removeFile(i)}
+                  aria-label={`Remove ${file.name}`}
+                >
+                  ✕
+                </button>
+                <span className={styles.thumbName} title={file.name}>
+                  {file.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
       <div className={styles.controls}>
