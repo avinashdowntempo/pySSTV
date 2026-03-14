@@ -3,6 +3,7 @@ import os
 from dataclasses import dataclass
 
 from flask import Flask, request, jsonify, send_file, Response
+from flask_compress import Compress  # type: ignore[import-untyped]
 from werkzeug.exceptions import HTTPException
 import io
 
@@ -85,6 +86,7 @@ def _parse_conversion_params() -> ConversionParams | tuple[Response, int]:
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
+    Compress(app)
 
     logging.basicConfig(
         level=os.environ.get("LOG_LEVEL", "INFO").upper(),

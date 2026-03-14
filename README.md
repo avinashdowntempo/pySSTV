@@ -168,7 +168,7 @@ Form parameters:
 
 - `image` (required) — the image file
 - `mode` — SSTV mode (default: `MartinM1`)
-- `sample_rate` — sampling rate in Hz (default: `48000`)
+- `sample_rate` — sampling rate in Hz (default: `22050`; SSTV signals max at 2300 Hz so Nyquist is well covered)
 - `bits` — bits per sample, `8` or `16` (default: `16`)
 - `resize` — resize image to fit mode, `true`/`false` (default: `true`)
 - `vox` — add VOX tones, `true`/`false` (default: `false`)
@@ -187,6 +187,8 @@ Example:
 | -------------------- | ------- | ------------------------------ |
 | `MAX_UPLOAD_SIZE_MB` | `10`    | Maximum upload file size in MB |
 | `LOG_LEVEL`          | `INFO`  | Logging level                  |
+
+> **Performance note:** Responses are gzip-compressed by nginx (and flask-compress as a fallback). The default sample rate of 22 050 Hz keeps WAV files roughly half the size of 48 kHz output with no loss in SSTV signal quality.
 
 ## Web Frontend
 
