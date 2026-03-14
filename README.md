@@ -5,6 +5,10 @@
 <h1 align="center">WavePix</h1>
 <p align="center"><strong>Turn any image into radio waves — SSTV modulation in pure Python</strong></p>
 
+<p align="center">
+  <a href="https://ko-fi.com/R6R81VY8SN"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" /></a>
+</p>
+
 ---
 
 WavePix generates SSTV-modulated WAV files from any image that PIL can open
