@@ -8,6 +8,7 @@ import { DemoSection } from "./components/DemoSection";
 import { HowToUse } from "./components/HowToUse";
 import { RadioWaves } from "./components/RadioWaves";
 import { InstallBanner } from "./components/InstallBanner";
+import { CallSignBoard } from "./components/CallSignBoard";
 import styles from "./App.module.css";
 
 export default function App() {
@@ -84,6 +85,8 @@ export default function App() {
           onRemove={removeJob}
           onClearCompleted={clearCompleted}
         />
+
+        <CallSignBoard />
       </main>
 
       <footer className={styles.playerSticky} role="contentinfo">

@@ -17,7 +17,8 @@ COPY pysstv/ ./pysstv/
 COPY server/ ./server/
 
 # Non-root user for security
-RUN useradd --create-home appuser
+RUN useradd --create-home appuser && \
+    mkdir -p /app/data && chown appuser:appuser /app/data
 USER appuser
 
 EXPOSE 8000

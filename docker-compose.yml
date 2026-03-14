@@ -8,6 +8,8 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     expose:
       - "8000"
+    volumes:
+      - callsign-data:/app/data
     restart: unless-stopped
     develop:
       watch:
@@ -39,3 +41,6 @@ services:
           path: ./frontend/package.json
         - action: rebuild
           path: ./frontend/vite.config.ts
+
+volumes:
+  callsign-data:

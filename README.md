@@ -194,6 +194,25 @@ Example:
 
 > **Performance note:** The default output format is OGG Vorbis, which compresses SSTV's narrowband sine waves by ~96% (e.g. MartinM1: 5 MB WAV → 200 KB OGG). Responses are also gzip-compressed by nginx. The default sample rate of 22 050 Hz keeps files roughly half the size of 48 kHz output with no loss in SSTV signal quality.
 
+### Operator Board (Call Sign) Endpoints
+
+Licensed amateur radio operators can check in to the live operator board. Call signs are verified against the FCC ULS database via [callook.info](https://callook.info).
+
+**`GET /callsign/lookup?callsign=W1AW`** — Look up a call sign.
+
+    $ curl http://localhost:8000/callsign/lookup?callsign=W1AW
+    {"callsign": "W1AW", "name": "ARRL HQ OPERATORS CLUB", "type": "CLUB", ...}
+
+**`POST /callsign/checkin`** — Verify and log a check-in.
+
+    $ curl -X POST http://localhost:8000/callsign/checkin \
+        -H "Content-Type: application/json" \
+        -d '{"callsign": "K3LR"}'
+
+**`GET /callsign/board`** — Fetch recent check-ins.
+
+    $ curl http://localhost:8000/callsign/board?limit=50
+
 ## Web Frontend
 
 A React-based single-page app lives in `frontend/`. It provides a visual interface for batch-converting images and playing the resulting SSTV audio directly in the browser.
@@ -211,6 +230,7 @@ A React-based single-page app lives in `frontend/`. It provides a visual interfa
 - **Dual download** — each completed job shows WAV (lossless) and OGG (compressed) download buttons with file sizes; playback always uses the lightweight OGG
 - **Download All as ZIP** — when two or more conversions are done, a single button fetches all WAV files and packages them into a ZIP
 - **Installable PWA** — service worker with offline caching, "Install App" button in the header, and standalone display mode; shows a "✓ Installed" badge once added to the home screen
+- **Operator board** — airport-style dark billboard where licensed ham radio operators can check in with their FCC call sign; call signs are verified against the ULS database via callook.info before appearing on the board
 - **Dark mode** — automatic via `prefers-color-scheme`
 - **Responsive** — optimized for both desktop and mobile
 
@@ -255,11 +275,12 @@ For a 1:1 pixel mapping (no scaling artifacts), upload images at the native size
     │   ├── demo_thumbs/    # Optimized WebP thumbnails for demos
     │   └── test_images/    # Original test PNG images
     ├── src/
-    │   ├── api/           # API client (fetchModes, convertImage)
+    │   ├── api/           # API client (fetchModes, convertImage, callsign)
     │   ├── components/
-    │   │   ├── AudioPlayer/   # Play/pause/stop/seek controls
-    │   │   ├── BatchList/     # Conversion job list with status & actions
-    │   │   ├── DemoSection/   # Pre-converted sample image/audio pairs
+    │   │   ├── AudioPlayer/     # Play/pause/stop/seek controls
+    │   │   ├── BatchList/       # Conversion job list with status & actions
+    │   │   ├── CallSignBoard/   # Airport-style operator check-in board
+    │   │   ├── DemoSection/     # Pre-converted sample image/audio pairs
     │   │   ├── HowToUse/      # Step-by-step SSTV decoder guide
     │   │   ├── ModeLegend/    # Collapsible mode resolution reference
     │   │   ├── InstallBanner/  # PWA install prompt / installed badge

@@ -24,3 +24,22 @@ export interface ConvertOptions {
   fskid?: string;
   format?: "wav" | "ogg";
 }
+
+/** Result from a callsign ULS lookup */
+export interface CallSignInfo {
+  callsign: string;
+  name: string;
+  type: string;
+  operClass: string;
+  gridsquare: string;
+  trustee: string;
+}
+
+/** A single check-in entry on the board */
+export interface BoardEntry {
+  callsign: string;
+  name: string;
+  operClass: string;
+  gridsquare: string;
+  checkedInAt: number;
+}

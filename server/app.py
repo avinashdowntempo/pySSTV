@@ -18,6 +18,7 @@ from server.config import (
     MAX_CONTENT_LENGTH,
 )
 from server.converter import convert_image_to_wav, wav_to_ogg
+from server.callsign import callsign_bp
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +95,7 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
     Compress(app)
+    app.register_blueprint(callsign_bp)
 
     logging.basicConfig(
         level=os.environ.get("LOG_LEVEL", "INFO").upper(),

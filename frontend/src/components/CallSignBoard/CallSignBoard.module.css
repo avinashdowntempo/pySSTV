@@ -1,0 +1,351 @@
+.board {
+  background: #0c0e13;
+  border: 1px solid #1e2330;
+  border-radius: 12px;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+/* Header bar */
+.boardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.boardTitle {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f0b429;
+}
+
+.liveIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #22c55e;
+}
+
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Column header row */
+.colHeaders {
+  display: grid;
+  grid-template-columns: 100px 1fr 80px 80px;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid #1e2330;
+  margin-bottom: 0.25rem;
+}
+
+.colLabel {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+/* Scrollable row area */
+.rows {
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #1e2330 transparent;
+}
+
+/* Each check-in row */
+.row {
+  display: grid;
+  grid-template-columns: 100px 1fr 80px 80px;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.15s;
+  animation: slideIn 0.3s ease-out;
+}
+
+.row:hover {
+  background: rgba(240, 180, 41, 0.06);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Call sign cell — amber text */
+.callsign {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f0b429;
+  letter-spacing: 0.06em;
+}
+
+/* Operator name */
+.name {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  color: #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Class badge */
+.classBadge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #22c55e;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+}
+
+/* Grid square */
+.grid {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+}
+
+/* Time cell */
+.time {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  color: #6b7280;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  color: #4b5563;
+  letter-spacing: 0.04em;
+}
+
+/* Check-in input section */
+.checkinRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #1e2330;
+}
+
+.callInput {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #1e2330;
+  border-radius: 6px;
+  background: #161923;
+  color: #f0b429;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.callInput::placeholder {
+  color: #4b5563;
+  text-transform: none;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+
+.callInput:focus {
+  border-color: #f0b429;
+}
+
+.checkinBtn {
+  padding: 0.4rem 0.85rem;
+  border: 1.5px solid #f0b429;
+  border-radius: 6px;
+  background: transparent;
+  color: #f0b429;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  white-space: nowrap;
+}
+
+.checkinBtn:hover:not(:disabled) {
+  background: #f0b429;
+  color: #0c0e13;
+}
+
+.checkinBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.error {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  color: #ef4444;
+  margin-top: 0.35rem;
+}
+
+/* ---- Confirm modal overlay ---- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.modal {
+  background: #161923;
+  border: 1px solid #1e2330;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: min(400px, 90vw);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.modalTitle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f0b429;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.infoLabel {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.infoValue {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  color: #e5e7eb;
+}
+
+.modalActions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.confirmBtn {
+  padding: 0.45rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background: #f0b429;
+  color: #0c0e13;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.confirmBtn:hover {
+  opacity: 0.85;
+}
+
+.cancelBtn {
+  padding: 0.45rem 1.2rem;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  background: transparent;
+  color: #9ca3af;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.cancelBtn:hover {
+  background: #1e2330;
+  color: #e5e7eb;
+}
+
+/* Responsive — stack on narrow screens */
+@media (max-width: 500px) {
+  .colHeaders,
+  .row {
+    grid-template-columns: 80px 1fr 60px;
+  }
+
+  /* Hide grid square on mobile */
+  .colHeaders > :nth-child(4),
+  .row > :nth-child(4) {
+    display: none;
+  }
+}
