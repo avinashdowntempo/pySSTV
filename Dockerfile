@@ -2,9 +2,9 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install system deps for Pillow
+# Install system deps for Pillow and audio encoding
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libjpeg62-turbo-dev zlib1g-dev && \
+    apt-get install -y --no-install-recommends libjpeg62-turbo-dev zlib1g-dev ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python deps

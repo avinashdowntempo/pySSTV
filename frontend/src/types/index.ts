@@ -8,8 +8,9 @@ export interface ConversionJob {
   mode: string;
   status: JobStatus;
   progress?: number;
-  wavBlob?: Blob;
-  wavUrl?: string;
+  audioBlob?: Blob;
+  audioUrl?: string;
+  wavSize?: number;
   error?: string;
 }
 
@@ -21,4 +22,5 @@ export interface ConvertOptions {
   resize?: boolean;
   vox?: boolean;
   fskid?: string;
+  format?: "wav" | "ogg";
 }

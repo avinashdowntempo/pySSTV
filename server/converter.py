@@ -1,6 +1,7 @@
 import io
 import logging
 import os
+import subprocess
 import tempfile
 
 from PIL import Image
@@ -91,3 +92,35 @@ def convert_image_to_wav(
         image.size[0], image.size[1], mode_name, sample_rate, bits, len(wav_bytes),
     )
     return wav_bytes
+
+
+def wav_to_ogg(wav_bytes: bytes, quality: int = 3) -> bytes:
+    """Convert WAV bytes to OGG Vorbis using ffmpeg.
+
+    Args:
+        wav_bytes: Raw WAV file content.
+        quality: Vorbis quality level (0–10, default 3 ≈ 112 kbps).
+
+    Returns:
+        OGG Vorbis file content as bytes.
+    """
+    result = subprocess.run(
+        [
+            "ffmpeg", "-y",
+            "-i", "pipe:0",
+            "-c:a", "libvorbis",
+            "-q:a", str(quality),
+            "-f", "ogg",
+            "pipe:1",
+        ],
+        input=wav_bytes,
+        capture_output=True,
+        timeout=120,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"ffmpeg failed: {result.stderr.decode(errors='replace')}")
+
+    logger.info("Encoded OGG: %d → %d bytes (%.0f%% reduction)",
+                len(wav_bytes), len(result.stdout),
+                (1 - len(result.stdout) / len(wav_bytes)) * 100)
+    return result.stdout

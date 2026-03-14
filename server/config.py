@@ -18,3 +18,5 @@ DEFAULT_BITS = 16
 # Upload limits
 MAX_CONTENT_LENGTH = int(os.environ.get("MAX_UPLOAD_SIZE_MB", 10)) * 1024 * 1024
 ALLOWED_EXTENSIONS = frozenset({"jpg", "jpeg", "png", "gif", "bmp", "tiff", "webp"})
+ALLOWED_FORMATS = frozenset({"wav", "ogg"})
+DEFAULT_FORMAT = "ogg"

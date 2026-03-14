@@ -11,6 +11,12 @@
   margin-bottom: 0.25rem;
 }
 
+.headerActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .header h2 {
   font-size: 1.1rem;
   margin: 0;
@@ -29,6 +35,31 @@
 
 .clearBtn:hover {
   background: var(--surface);
+}
+
+.zipBtn {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.zipBtn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.zipBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 /* ---- Individual job row ---- */
@@ -136,7 +167,53 @@
 .actions {
   display: flex;
   gap: 0.4rem;
+  align-items: center;
   flex-shrink: 0;
+}
+
+.downloadGroup {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.dlBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  line-height: 1;
+  gap: 1px;
+}
+
+.dlBtn:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+}
+
+.dlBtn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.dlFormat {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text);
+  letter-spacing: 0.03em;
+}
+
+.dlSize {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .iconBtn {

@@ -162,23 +162,27 @@ Teardown completely (remove containers, images, and volumes):
 
     $ curl http://localhost:8000/modes
 
-**`POST /convert`** — Convert an image to a WAV file.
+**`POST /convert`** — Convert an image to an audio file.
 
 Form parameters:
 
 - `image` (required) — the image file
 - `mode` — SSTV mode (default: `MartinM1`)
+- `format` — output format, `ogg` or `wav` (default: `ogg`)
 - `sample_rate` — sampling rate in Hz (default: `22050`; SSTV signals max at 2300 Hz so Nyquist is well covered)
 - `bits` — bits per sample, `8` or `16` (default: `16`)
 - `resize` — resize image to fit mode, `true`/`false` (default: `true`)
 - `vox` — add VOX tones, `true`/`false` (default: `false`)
 - `fskid` — FSK ID string (optional)
 
+When `format=ogg`, the response includes an `X-WAV-Size` header with the equivalent uncompressed WAV size in bytes.
+
 Example:
 
     $ curl -X POST http://localhost:8000/convert \
         -F "image=@photo.jpg" \
         -F "mode=ScottieS1" \
+        -F "format=wav" \
         --output photo_ScottieS1.wav
 
 ### Environment variables
@@ -188,7 +192,7 @@ Example:
 | `MAX_UPLOAD_SIZE_MB` | `10`    | Maximum upload file size in MB |
 | `LOG_LEVEL`          | `INFO`  | Logging level                  |
 
-> **Performance note:** Responses are gzip-compressed by nginx (and flask-compress as a fallback). The default sample rate of 22 050 Hz keeps WAV files roughly half the size of 48 kHz output with no loss in SSTV signal quality.
+> **Performance note:** The default output format is OGG Vorbis, which compresses SSTV's narrowband sine waves by ~96% (e.g. MartinM1: 5 MB WAV → 200 KB OGG). Responses are also gzip-compressed by nginx. The default sample rate of 22 050 Hz keeps files roughly half the size of 48 kHz output with no loss in SSTV signal quality.
 
 ## Web Frontend
 
@@ -204,7 +208,8 @@ A React-based single-page app lives in `frontend/`. It provides a visual interfa
 - **Batch conversion queue** — jobs are processed sequentially; status badges show pending / converting / transmit / error
 - **Built-in audio player** — play, pause, stop, seek, and "next" controls; only one track plays at a time
 - **Animated radio waves** — SVG broadcast animation in the header pulses when audio is transmitting
-- **Thumbnails and download** — each job shows a preview of the source image with a one-click WAV download
+- **Dual download** — each completed job shows WAV (lossless) and OGG (compressed) download buttons with file sizes; playback always uses the lightweight OGG
+- **Download All as ZIP** — when two or more conversions are done, a single button fetches all WAV files and packages them into a ZIP
 - **Dark mode** — automatic via `prefers-color-scheme`
 - **Responsive** — optimized for both desktop and mobile
 

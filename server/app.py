@@ -9,13 +9,15 @@ import io
 
 from server.config import (
     ALLOWED_EXTENSIONS,
+    ALLOWED_FORMATS,
     ALLOWED_MODES,
     DEFAULT_BITS,
+    DEFAULT_FORMAT,
     DEFAULT_MODE,
     DEFAULT_SAMPLE_RATE,
     MAX_CONTENT_LENGTH,
 )
-from server.converter import convert_image_to_wav
+from server.converter import convert_image_to_wav, wav_to_ogg
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +54,7 @@ class ConversionParams:
     resize: bool
     vox: bool
     fskid: str | None
+    format: str
 
 
 def _parse_conversion_params() -> ConversionParams | tuple[Response, int]:
@@ -80,7 +83,11 @@ def _parse_conversion_params() -> ConversionParams | tuple[Response, int]:
     if fskid and len(fskid) > 128:
         return jsonify({"error": "fskid must be 128 characters or fewer"}), 400
 
-    return ConversionParams(mode=mode, sample_rate=sample_rate, bits=bits, resize=resize, vox=vox, fskid=fskid)
+    output_format: str = request.form.get("format", DEFAULT_FORMAT)
+    if output_format not in ALLOWED_FORMATS:
+        return jsonify({"error": f"Unknown format '{output_format}'. Allowed: {', '.join(sorted(ALLOWED_FORMATS))}"}), 400
+
+    return ConversionParams(mode=mode, sample_rate=sample_rate, bits=bits, resize=resize, vox=vox, fskid=fskid, format=output_format)
 
 
 def create_app() -> Flask:
@@ -131,13 +138,24 @@ def create_app() -> Flask:
             return jsonify({"error": "Internal server error during conversion"}), 500
 
         base_name = file.filename.rsplit(".", 1)[0] if file.filename else "output"
-        output_filename = f"{base_name}_{params.mode}.wav"
+
+        if params.format == "ogg":
+            ogg_bytes = wav_to_ogg(wav_bytes)
+            response = send_file(
+                io.BytesIO(ogg_bytes),
+                mimetype="audio/ogg",
+                as_attachment=True,
+                download_name=f"{base_name}_{params.mode}.ogg",
+            )
+            response.headers["X-WAV-Size"] = str(len(wav_bytes))
+            response.headers["Access-Control-Expose-Headers"] = "X-WAV-Size"
+            return response
 
         return send_file(
             io.BytesIO(wav_bytes),
             mimetype="audio/wav",
             as_attachment=True,
-            download_name=output_filename,
+            download_name=f"{base_name}_{params.mode}.wav",
         )
 
     @app.errorhandler(413)

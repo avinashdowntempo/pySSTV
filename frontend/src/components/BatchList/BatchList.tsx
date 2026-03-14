@@ -1,5 +1,8 @@
+import { useState } from "react";
+import JSZip from "jszip";
 import type { ConversionJob } from "../../types";
 import type { AudioPlayerState } from "../../hooks/useAudioPlayer";
+import { downloadWav } from "../../api/sstv";
 import styles from "./BatchList.module.css";
 
 interface Props {
@@ -10,10 +13,66 @@ interface Props {
   readonly onClearCompleted: () => void;
 }
 
-function formatSize(blob?: Blob) {
-  if (!blob) return "";
-  const kb = blob.size / 1024;
+function formatBytes(bytes: number) {
+  if (bytes <= 0) return "";
+  const kb = bytes / 1024;
   return kb > 1024 ? `${(kb / 1024).toFixed(1)} MB` : `${Math.round(kb)} KB`;
+}
+
+function DownloadButtons({ job }: { readonly job: ConversionJob }) {
+  const [busy, setBusy] = useState(false);
+
+  const handleWavDownload = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (busy) return;
+    setBusy(true);
+    try {
+      const blob = await downloadWav(job.file, job.mode);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = job.file.name.replace(/\.[^.]+$/, ".wav");
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleOggDownload = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!job.audioUrl) return;
+    const a = document.createElement("a");
+    a.href = job.audioUrl;
+    a.download = job.file.name.replace(/\.[^.]+$/, ".ogg");
+    a.click();
+  };
+
+  return (
+    <div className={styles.downloadGroup} onClick={(e) => e.stopPropagation()}>
+      <button
+        className={styles.dlBtn}
+        onClick={handleWavDownload}
+        disabled={busy}
+        title="Download lossless WAV for radio transmission"
+      >
+        <span className={styles.dlFormat}>⬇ WAV</span>
+        <span className={styles.dlSize}>
+          {busy ? "…" : formatBytes(job.wavSize ?? 0)}
+        </span>
+      </button>
+      <button
+        className={styles.dlBtn}
+        onClick={handleOggDownload}
+        title="Download compressed OGG"
+      >
+        <span className={styles.dlFormat}>⬇ OGG</span>
+        <span className={styles.dlSize}>
+          {formatBytes(job.audioBlob?.size ?? 0)}
+        </span>
+      </button>
+    </div>
+  );
 }
 
 const statusLabel: Record<string, string> = {
@@ -22,6 +81,51 @@ const statusLabel: Record<string, string> = {
   done: "Transmit",
   error: "Error",
 };
+
+function DownloadAllZip({ jobs }: { readonly jobs: ConversionJob[] }) {
+  const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState("");
+
+  const doneJobs = jobs.filter((j) => j.status === "done");
+
+  const handleDownload = async () => {
+    if (busy || doneJobs.length === 0) return;
+    setBusy(true);
+    const zip = new JSZip();
+
+    for (let i = 0; i < doneJobs.length; i++) {
+      const job = doneJobs[i];
+      setProgress(`${i + 1}/${doneJobs.length}`);
+      const wavBlob = await downloadWav(job.file, job.mode);
+      const name = job.file.name.replace(/\.[^.]+$/, `_${job.mode}.wav`);
+      zip.file(name, wavBlob);
+    }
+
+    setProgress("Zipping…");
+    const blob = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "sstv-conversions.zip";
+    a.click();
+    URL.revokeObjectURL(url);
+    setBusy(false);
+    setProgress("");
+  };
+
+  if (doneJobs.length < 2) return null;
+
+  return (
+    <button
+      className={styles.zipBtn}
+      onClick={handleDownload}
+      disabled={busy}
+      title="Download all converted files as a ZIP (WAV)"
+    >
+      {busy ? `📦 ${progress}` : `📦 Download All (${doneJobs.length})`}
+    </button>
+  );
+}
 
 export default function BatchList({
   jobs,
@@ -50,16 +154,19 @@ export default function BatchList({
     >
       <div className={styles.header}>
         <h2>Conversions</h2>
-        {hasCompleted && (
-          <button className={styles.clearBtn} onClick={onClearCompleted}>
-            Clear finished
-          </button>
-        )}
+        <div className={styles.headerActions}>
+          <DownloadAllZip jobs={jobs} />
+          {hasCompleted && (
+            <button className={styles.clearBtn} onClick={onClearCompleted}>
+              Clear finished
+            </button>
+          )}
+        </div>
       </div>
 
       {jobs.map((job) => {
         const isActive =
-          job.status === "done" && job.wavUrl === audioState.currentUrl;
+          job.status === "done" && job.audioUrl === audioState.currentUrl;
 
         return (
           <div
@@ -70,16 +177,16 @@ export default function BatchList({
             role={job.status === "done" ? "button" : undefined}
             tabIndex={job.status === "done" ? 0 : undefined}
             onClick={() => {
-              if (job.status === "done" && job.wavUrl) onPlay(job.wavUrl);
+              if (job.status === "done" && job.audioUrl) onPlay(job.audioUrl);
             }}
             onKeyDown={(e) => {
               if (
                 (e.key === "Enter" || e.key === " ") &&
                 job.status === "done" &&
-                job.wavUrl
+                job.audioUrl
               ) {
                 e.preventDefault();
-                onPlay(job.wavUrl);
+                onPlay(job.audioUrl);
               }
             }}
           >
@@ -89,7 +196,6 @@ export default function BatchList({
               <div className={styles.fileName}>{job.file.name}</div>
               <div className={styles.meta}>
                 {job.mode}
-                {job.wavBlob ? ` · ${formatSize(job.wavBlob)}` : ""}
                 {job.error ? ` · ${job.error}` : ""}
               </div>
             </div>
@@ -106,17 +212,7 @@ export default function BatchList({
             </span>
 
             <div className={styles.actions}>
-              {job.status === "done" && job.wavUrl && (
-                <a
-                  className={styles.iconBtn}
-                  href={job.wavUrl}
-                  download={job.file.name.replace(/\.[^.]+$/, ".wav")}
-                  title="Download WAV"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  ⬇
-                </a>
-              )}
+              {job.status === "done" && <DownloadButtons job={job} />}
               <button
                 className={styles.iconBtn}
                 title="Remove"

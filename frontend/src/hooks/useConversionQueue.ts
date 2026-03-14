@@ -31,15 +31,22 @@ export function useConversionQueue() {
     );
 
     try {
-      const blob = await convertImage(pending.file, {
+      const { blob, wavSize } = await convertImage(pending.file, {
         mode: pending.mode,
+        format: "ogg",
       } as ConvertOptions);
-      const wavUrl = URL.createObjectURL(blob);
+      const audioUrl = URL.createObjectURL(blob);
 
       syncRef(
         queueRef.current.map((j) =>
           j.id === pending.id
-            ? { ...j, status: "done" as const, wavBlob: blob, wavUrl }
+            ? {
+                ...j,
+                status: "done" as const,
+                audioBlob: blob,
+                audioUrl,
+                wavSize,
+              }
             : j,
         ),
       );
@@ -77,13 +84,13 @@ export function useConversionQueue() {
 
   const removeJob = useCallback((id: string) => {
     const job = queueRef.current.find((j) => j.id === id);
-    if (job?.wavUrl) URL.revokeObjectURL(job.wavUrl);
+    if (job?.audioUrl) URL.revokeObjectURL(job.audioUrl);
     syncRef(queueRef.current.filter((j) => j.id !== id));
   }, []);
 
   const clearCompleted = useCallback(() => {
     queueRef.current.forEach((j) => {
-      if (j.status === "done" && j.wavUrl) URL.revokeObjectURL(j.wavUrl);
+      if (j.status === "done" && j.audioUrl) URL.revokeObjectURL(j.audioUrl);
     });
     syncRef(
       queueRef.current.filter(

@@ -15,14 +15,14 @@ export default function App() {
   const [page, setPage] = useState<"home" | "guide">("home");
 
   const handleNext = useCallback(() => {
-    const doneJobs = jobs.filter((j) => j.status === "done" && j.wavUrl);
+    const doneJobs = jobs.filter((j) => j.status === "done" && j.audioUrl);
     if (doneJobs.length === 0) return;
 
     const currentIdx = doneJobs.findIndex(
-      (j) => j.wavUrl === audioState.currentUrl,
+      (j) => j.audioUrl === audioState.currentUrl,
     );
     const nextIdx = (currentIdx + 1) % doneJobs.length;
-    audioControls.play(doneJobs[nextIdx].wavUrl!);
+    audioControls.play(doneJobs[nextIdx].audioUrl!);
   }, [jobs, audioState.currentUrl, audioControls]);
 
   if (page === "guide") {
@@ -61,7 +61,7 @@ export default function App() {
         </button>
       </nav>
 
-      <main id="main-content">
+      <main id="main-content" className={styles.main}>
         <UploadForm onSubmit={addJobs} />
 
         <div
