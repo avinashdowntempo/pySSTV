@@ -5,13 +5,13 @@ import type {
 import styles from "./AudioPlayer.module.css";
 
 interface Props {
-  state: AudioPlayerState;
-  controls: AudioPlayerControls;
-  onNext?: () => void;
+  readonly state: AudioPlayerState;
+  readonly controls: AudioPlayerControls;
+  readonly onNext?: () => void;
 }
 
 function formatTime(secs: number) {
-  if (!isFinite(secs) || secs < 0) return "0:00";
+  if (!Number.isFinite(secs) || secs < 0) return "0:00";
   const m = Math.floor(secs / 60);
   const s = Math.floor(secs % 60);
   return `${m}:${s.toString().padStart(2, "0")}`;
@@ -21,7 +21,10 @@ export default function AudioPlayer({ state, controls, onNext }: Props) {
   const active = state.currentUrl !== null;
 
   return (
-    <div className={`${styles.player} ${active ? "" : styles.inactive}`}>
+    <section
+      className={`${styles.player} ${active ? "" : styles.inactive}`}
+      aria-label="Audio player"
+    >
       <div className={styles.transport}>
         {state.isPlaying ? (
           <button
@@ -58,11 +61,16 @@ export default function AudioPlayer({ state, controls, onNext }: Props) {
         step={0.1}
         value={state.currentTime}
         onChange={(e) => controls.seek(Number(e.target.value))}
+        aria-label="Playback progress"
+        aria-valuemin={0}
+        aria-valuemax={state.duration || 0}
+        aria-valuenow={state.currentTime}
+        aria-valuetext={`${formatTime(state.currentTime)} of ${formatTime(state.duration)}`}
       />
       <div className={styles.time}>
         <span>{formatTime(state.currentTime)}</span>
         <span>{formatTime(state.duration)}</span>
       </div>
-    </div>
+    </section>
   );
 }

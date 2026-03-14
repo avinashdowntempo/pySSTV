@@ -38,13 +38,17 @@ export default function App() {
 
   return (
     <div className={styles.app}>
+      <a href="#main-content" className={styles.skipNav}>
+        Skip to main content
+      </a>
+
       <header className={styles.header}>
         <RadioWaves active={audioState.isPlaying} />
         <img src="/logo.png" alt="WavePix" className={styles.logo} />
         <RadioWaves active={audioState.isPlaying} />
       </header>
 
-      <nav className={styles.nav}>
+      <nav className={styles.nav} aria-label="Main navigation">
         <button
           type="button"
           className={styles.guideLink}
@@ -57,27 +61,30 @@ export default function App() {
         </button>
       </nav>
 
-      <UploadForm onSubmit={addJobs} />
+      <main id="main-content">
+        <UploadForm onSubmit={addJobs} />
 
-      <div
-        className={`${styles.demoWrap} ${jobs.length > 0 ? styles.demoHidden : ""}`}
-      >
-        <DemoSection
-          currentUrl={audioState.currentUrl}
-          isPlaying={audioState.isPlaying}
+        <div
+          className={`${styles.demoWrap} ${jobs.length > 0 ? styles.demoHidden : ""}`}
+          aria-hidden={jobs.length > 0}
+        >
+          <DemoSection
+            currentUrl={audioState.currentUrl}
+            isPlaying={audioState.isPlaying}
+            onPlay={audioControls.play}
+          />
+        </div>
+
+        <BatchList
+          jobs={jobs}
+          audioState={audioState}
           onPlay={audioControls.play}
+          onRemove={removeJob}
+          onClearCompleted={clearCompleted}
         />
-      </div>
+      </main>
 
-      <BatchList
-        jobs={jobs}
-        audioState={audioState}
-        onPlay={audioControls.play}
-        onRemove={removeJob}
-        onClearCompleted={clearCompleted}
-      />
-
-      <div className={styles.playerSticky}>
+      <footer className={styles.playerSticky} role="contentinfo">
         <AudioPlayer
           state={audioState}
           controls={audioControls}
@@ -85,7 +92,7 @@ export default function App() {
             jobs.some((j) => j.status === "done") ? handleNext : undefined
           }
         />
-      </div>
+      </footer>
     </div>
   );
 }

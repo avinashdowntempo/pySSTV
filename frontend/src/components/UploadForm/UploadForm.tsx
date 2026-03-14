@@ -4,7 +4,7 @@ import { ModeLegend } from "../ModeLegend";
 import styles from "./UploadForm.module.css";
 
 interface Props {
-  onSubmit: (files: File[], mode: string) => void;
+  readonly onSubmit: (files: File[], mode: string) => void;
 }
 
 const ACCEPTED =
@@ -80,9 +80,15 @@ export default function UploadForm({ onSubmit }: Props) {
       onDragLeave={() => setDragOver(false)}
       onDrop={handleDrop}
     >
-      <div
+      <button
+        type="button"
         className={styles.dropZone}
         onClick={() => !atLimit && inputRef.current?.click()}
+        aria-label={
+          atLimit
+            ? `Maximum ${MAX_FILES} images reached`
+            : "Drop images here or click to browse"
+        }
       >
         <div className={styles.dropIcon}>📷</div>
         <p className={styles.dropText}>
@@ -102,13 +108,13 @@ export default function UploadForm({ onSubmit }: Props) {
           className={styles.hiddenInput}
           onChange={(e) => addFiles(e.target.files)}
         />
-      </div>
+      </button>
 
       {files.length > 0 && (
         <div className={styles.previewSection}>
           <div className={styles.previewHeader}>
             <span className={styles.fileCount}>
-              {files.length} / {MAX_FILES} image{files.length !== 1 ? "s" : ""}
+              {files.length} / {MAX_FILES} image{files.length === 1 ? "" : "s"}
             </span>
             <button
               type="button"
@@ -154,6 +160,7 @@ export default function UploadForm({ onSubmit }: Props) {
           className={styles.modeSelect}
           value={selectedMode}
           onChange={(e) => setSelectedMode(e.target.value)}
+          aria-label="SSTV mode"
         >
           {modes.map((m) => (
             <option key={m} value={m}>

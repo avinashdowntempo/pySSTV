@@ -7,6 +7,24 @@
   gap: 1.5rem;
 }
 
+/* Skip navigation — visible only on focus */
+.skipNav {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.skipNav:focus {
+  top: 0.5rem;
+}
+
 .header {
   display: flex;
   align-items: center;

@@ -5,9 +5,64 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WavePix — Image to SSTV Converter</title>
+    <meta
+      name="description"
+      content="Turn any image into SSTV-modulated audio. Upload photos, choose from 19 modes (MartinM1, ScottieS1, Robot36, and more), and download WAV files for radio transmission — all in your browser."
+    />
+    <meta
+      name="keywords"
+      content="SSTV, slow scan television, image to audio, ham radio, amateur radio, WAV, MartinM1, ScottieS1, Robot36, SSTV encoder, pySSTV"
+    />
+    <link rel="canonical" href="https://wavepix.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="WavePix — Image to SSTV Converter" />
+    <meta
+      property="og:description"
+      content="Turn any image into SSTV-modulated audio. Upload photos, pick a mode, and download WAV files for radio transmission."
+    />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:url" content="https://wavepix.app/" />
+    <meta property="og:site_name" content="WavePix" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WavePix — Image to SSTV Converter" />
+    <meta
+      name="twitter:description"
+      content="Turn any image into SSTV-modulated audio for ham radio transmission."
+    />
+    <meta name="twitter:image" content="/logo.png" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "WavePix",
+        "url": "https://wavepix.app/",
+        "description": "Turn any image into SSTV-modulated audio. Supports 19 modes including MartinM1, ScottieS1, and Robot36.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>WavePix — Image to SSTV Converter</h1>
+      <p>
+        Turn any image into SSTV-modulated WAV audio for ham radio transmission.
+        Supports 19 modes including MartinM1, ScottieS1, Robot36, PD90, and
+        more.
+      </p>
+      <p>
+        This application requires JavaScript to run. Please enable JavaScript in
+        your browser.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
     <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
     <script>

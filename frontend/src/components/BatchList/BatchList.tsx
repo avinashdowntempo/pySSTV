@@ -3,11 +3,11 @@ import type { AudioPlayerState } from "../../hooks/useAudioPlayer";
 import styles from "./BatchList.module.css";
 
 interface Props {
-  jobs: ConversionJob[];
-  audioState: AudioPlayerState;
-  onPlay: (url: string) => void;
-  onRemove: (id: string) => void;
-  onClearCompleted: () => void;
+  readonly jobs: ConversionJob[];
+  readonly audioState: AudioPlayerState;
+  readonly onPlay: (url: string) => void;
+  readonly onRemove: (id: string) => void;
+  readonly onClearCompleted: () => void;
 }
 
 function formatSize(blob?: Blob) {
@@ -43,7 +43,11 @@ export default function BatchList({
   );
 
   return (
-    <div className={styles.list}>
+    <section
+      className={styles.list}
+      aria-label="Conversion queue"
+      aria-live="polite"
+    >
       <div className={styles.header}>
         <h2>Conversions</h2>
         {hasCompleted && (
@@ -63,8 +67,20 @@ export default function BatchList({
             className={`${styles.jobRow} ${isActive ? styles.selected : ""} ${
               job.status === "done" ? styles.clickable : ""
             }`}
+            role={job.status === "done" ? "button" : undefined}
+            tabIndex={job.status === "done" ? 0 : undefined}
             onClick={() => {
               if (job.status === "done" && job.wavUrl) onPlay(job.wavUrl);
+            }}
+            onKeyDown={(e) => {
+              if (
+                (e.key === "Enter" || e.key === " ") &&
+                job.status === "done" &&
+                job.wavUrl
+              ) {
+                e.preventDefault();
+                onPlay(job.wavUrl);
+              }
             }}
           >
             <JobThumbnail file={job.file} />
@@ -115,12 +131,12 @@ export default function BatchList({
           </div>
         );
       })}
-    </div>
+    </section>
   );
 }
 
 /** Displays an object-URL thumbnail for the source image file */
-function JobThumbnail({ file }: { file: File }) {
+function JobThumbnail({ file }: { readonly file: File }) {
   const url = URL.createObjectURL(file);
   return (
     <img
