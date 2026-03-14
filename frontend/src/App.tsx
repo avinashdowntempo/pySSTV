@@ -7,6 +7,7 @@ import { BatchList } from "./components/BatchList";
 import { DemoSection } from "./components/DemoSection";
 import { HowToUse } from "./components/HowToUse";
 import { RadioWaves } from "./components/RadioWaves";
+import { InstallBanner } from "./components/InstallBanner";
 import styles from "./App.module.css";
 
 export default function App() {
@@ -59,6 +60,7 @@ export default function App() {
         >
           📖 How to use
         </button>
+        <InstallBanner />
       </nav>
 
       <main id="main-content" className={styles.main}>

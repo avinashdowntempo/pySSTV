@@ -1,0 +1,51 @@
+.installBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 0.1s;
+  white-space: nowrap;
+}
+
+.installBtn:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(1.03);
+}
+
+.installBtn:active {
+  transform: scale(0.97);
+}
+
+.installIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.checkIcon {
+  font-size: 0.8rem;
+  line-height: 1;
+}

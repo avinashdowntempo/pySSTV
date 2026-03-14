@@ -210,6 +210,7 @@ A React-based single-page app lives in `frontend/`. It provides a visual interfa
 - **Animated radio waves** — SVG broadcast animation in the header pulses when audio is transmitting
 - **Dual download** — each completed job shows WAV (lossless) and OGG (compressed) download buttons with file sizes; playback always uses the lightweight OGG
 - **Download All as ZIP** — when two or more conversions are done, a single button fetches all WAV files and packages them into a ZIP
+- **Installable PWA** — service worker with offline caching, "Install App" button in the header, and standalone display mode; shows a "✓ Installed" badge once added to the home screen
 - **Dark mode** — automatic via `prefers-color-scheme`
 - **Responsive** — optimized for both desktop and mobile
 
@@ -261,6 +262,7 @@ For a 1:1 pixel mapping (no scaling artifacts), upload images at the native size
     │   │   ├── DemoSection/   # Pre-converted sample image/audio pairs
     │   │   ├── HowToUse/      # Step-by-step SSTV decoder guide
     │   │   ├── ModeLegend/    # Collapsible mode resolution reference
+    │   │   ├── InstallBanner/  # PWA install prompt / installed badge
     │   │   ├── RadioWaves/    # Animated SVG broadcast indicator
     │   │   └── UploadForm/    # Drag-and-drop image upload + mode picker
     │   ├── hooks/
@@ -269,7 +271,7 @@ For a 1:1 pixel mapping (no scaling artifacts), upload images at the native size
     │   ├── types/         # Shared TypeScript interfaces
     │   ├── App.tsx        # Root layout wiring hooks → components
     │   └── index.css      # Global CSS custom properties & reset
-    └── vite.config.ts     # Dev server proxy (/api → localhost:8000)
+    └── vite.config.ts     # Dev server proxy + PWA plugin config
 
 ## License
 
