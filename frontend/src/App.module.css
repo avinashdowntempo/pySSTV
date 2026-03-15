@@ -34,7 +34,7 @@
 
 .logo {
   width: min(100%, 360px);
-  max-height: 200px;
+  height: auto;
   object-fit: contain;
 }
 
@@ -97,6 +97,10 @@
   .app {
     padding: 1rem 0.75rem 4rem;
     gap: 1rem;
+  }
+
+  .logo {
+    width: min(100%, 240px);
   }
 
   .nav {

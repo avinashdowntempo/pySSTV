@@ -44,6 +44,7 @@ export default defineConfig({
           "**/test_images/**",
           "**/demo_audio/**",
           "**/demo_thumbs/**",
+          "**/logo-*.png",
         ],
         runtimeCaching: [
           {

@@ -47,7 +47,22 @@ export default function App() {
 
       <header className={styles.header}>
         <RadioWaves active={audioState.isPlaying} />
-        <img src="/logo.png" alt="WavePix" className={styles.logo} />
+        <picture>
+          <source
+            type="image/webp"
+            srcSet="/logo-360.webp 360w, /logo-480.webp 480w, /logo-768.webp 768w"
+            sizes="(max-width: 500px) 240px, 360px"
+          />
+          <img
+            src="/logo.png"
+            srcSet="/logo-360.png 360w, /logo-480.png 480w, /logo-768.png 768w"
+            sizes="(max-width: 500px) 240px, 360px"
+            alt="WavePix"
+            className={styles.logo}
+            width={768}
+            height={512}
+          />
+        </picture>
         <RadioWaves active={audioState.isPlaying} />
       </header>
 
