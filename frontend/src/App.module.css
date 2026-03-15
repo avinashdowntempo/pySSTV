@@ -44,6 +44,7 @@
   align-items: center;
   gap: 1rem;
   margin-top: -0.75rem;
+  flex-wrap: wrap;
 }
 
 .guideLink {
@@ -89,4 +90,20 @@
   opacity: 0;
   overflow: hidden;
   pointer-events: none;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 500px) {
+  .app {
+    padding: 1rem 0.75rem 4rem;
+    gap: 1rem;
+  }
+
+  .nav {
+    gap: 0.5rem;
+  }
+
+  .guideLink {
+    font-size: 0.75rem;
+  }
 }

@@ -8,6 +8,7 @@ import { DemoSection } from "./components/DemoSection";
 import { HowToUse } from "./components/HowToUse";
 import { RadioWaves } from "./components/RadioWaves";
 import { InstallBanner } from "./components/InstallBanner";
+import { NavBoardBadge } from "./components/CallSignBoard/NavBoardBadge";
 import { CallSignBoard } from "./components/CallSignBoard";
 import styles from "./App.module.css";
 
@@ -62,6 +63,7 @@ export default function App() {
           📖 How to use
         </button>
         <InstallBanner />
+        <NavBoardBadge />
       </nav>
 
       <main id="main-content" className={styles.main}>
@@ -86,7 +88,9 @@ export default function App() {
           onClearCompleted={clearCompleted}
         />
 
-        <CallSignBoard />
+        <div id="operator-board">
+          <CallSignBoard />
+        </div>
       </main>
 
       <footer className={styles.playerSticky} role="contentinfo">

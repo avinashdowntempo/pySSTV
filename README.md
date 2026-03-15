@@ -230,7 +230,7 @@ A React-based single-page app lives in `frontend/`. It provides a visual interfa
 - **Dual download** — each completed job shows WAV (lossless) and OGG (compressed) download buttons with file sizes; playback always uses the lightweight OGG
 - **Download All as ZIP** — when two or more conversions are done, a single button fetches all WAV files and packages them into a ZIP
 - **Installable PWA** — service worker with offline caching, "Install App" button in the header, and standalone display mode; shows a "✓ Installed" badge once added to the home screen
-- **Operator board** — airport-style dark billboard where licensed ham radio operators can check in with their FCC call sign; call signs are verified against the ULS database via callook.info before appearing on the board
+- **Operator board** — airport-style dark billboard where licensed ham radio operators can check in with their FCC call sign; call signs are verified against the ULS database via callook.info before appearing on the board. A compact **nav badge** in the header rotates through checked-in call signs every 2 seconds and scrolls to the full board on click.
 - **Dark mode** — automatic via `prefers-color-scheme`
 - **Responsive** — optimized for both desktop and mobile
 
@@ -280,6 +280,8 @@ For a 1:1 pixel mapping (no scaling artifacts), upload images at the native size
     │   │   ├── AudioPlayer/     # Play/pause/stop/seek controls
     │   │   ├── BatchList/       # Conversion job list with status & actions
     │   │   ├── CallSignBoard/   # Airport-style operator check-in board
+    │   │   │   ├── CallSignBoard.tsx   # Full board with list/ticker/marquee/flip views
+    │   │   │   └── NavBoardBadge.tsx    # Compact nav badge with rotating call signs
     │   │   ├── DemoSection/     # Pre-converted sample image/audio pairs
     │   │   ├── HowToUse/      # Step-by-step SSTV decoder guide
     │   │   ├── ModeLegend/    # Collapsible mode resolution reference
