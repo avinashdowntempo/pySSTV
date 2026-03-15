@@ -252,3 +252,57 @@
     transform: rotate(360deg);
   }
 }
+
+/* ---- Mobile ---- */
+@media (max-width: 500px) {
+  .jobRow {
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .thumbnail {
+    width: 36px;
+    height: 36px;
+  }
+
+  .fileName {
+    font-size: 0.8rem;
+  }
+
+  .meta {
+    font-size: 0.7rem;
+  }
+
+  .badge {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.45rem;
+  }
+
+  .dlBtn {
+    padding: 0.2rem 0.35rem;
+  }
+
+  .dlFormat {
+    font-size: 0.58rem;
+  }
+
+  .dlSize {
+    font-size: 0.52rem;
+  }
+
+  .iconBtn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+
+  .header h2 {
+    font-size: 0.95rem;
+  }
+
+  .clearBtn,
+  .zipBtn {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.55rem;
+  }
+}

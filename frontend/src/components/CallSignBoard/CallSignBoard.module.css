@@ -537,10 +537,15 @@
 
 /* Responsive — stack on narrow screens */
 @media (max-width: 500px) {
+  .board {
+    padding: 0.75rem;
+  }
+
   .colHeaders,
   .row,
   .tickerRow {
-    grid-template-columns: 80px 1fr 60px;
+    grid-template-columns: 70px 1fr 50px;
+    gap: 0.35rem;
   }
 
   /* Hide grid square on mobile */
@@ -548,6 +553,32 @@
   .row > :nth-child(4),
   .tickerRow > :nth-child(4) {
     display: none;
+  }
+
+  .callsign {
+    font-size: 0.72rem;
+  }
+
+  .name {
+    font-size: 0.65rem;
+  }
+
+  .classBadge {
+    font-size: 0.55rem;
+  }
+
+  .checkinRow {
+    flex-wrap: wrap;
+  }
+
+  .callInput {
+    font-size: 0.7rem;
+  }
+
+  .checkinBtn,
+  .seedBtn {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.6rem;
   }
 
   .viewToggle {
