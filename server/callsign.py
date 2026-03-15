@@ -103,6 +103,12 @@ def checkin() -> Response | tuple[Response, int]:
 
     db = _get_db()
     try:
+        existing = db.execute(
+            "SELECT 1 FROM checkins WHERE callsign = ?", (result["callsign"],)
+        ).fetchone()
+        if existing:
+            return jsonify({"error": f"{result['callsign']} is already checked in"}), 409
+
         db.execute(
             "INSERT INTO checkins (callsign, name, oper_class, gridsquare, checked_in_at) VALUES (?, ?, ?, ?, ?)",
             (result["callsign"], result["name"], result["operClass"], result["gridsquare"], time.time()),
