@@ -12,9 +12,15 @@ interface Props {
   readonly currentUrl: string | null;
   readonly isPlaying: boolean;
   readonly onPlay: (url: string) => void;
+  readonly onPause: () => void;
 }
 
-export default function DemoSection({ currentUrl, isPlaying, onPlay }: Props) {
+export default function DemoSection({
+  currentUrl,
+  isPlaying,
+  onPlay,
+  onPause,
+}: Props) {
   return (
     <section className={styles.section}>
       <h2 className={styles.heading}>Try a sample</h2>
@@ -42,8 +48,16 @@ export default function DemoSection({ currentUrl, isPlaying, onPlay }: Props) {
                 />
                 <button
                   className={styles.playOverlay}
-                  onClick={() => onPlay(audioUrl)}
-                  aria-label={`Play ${label}`}
+                  onClick={() => {
+                    if (active && isPlaying) {
+                      onPause();
+                    } else {
+                      onPlay(audioUrl);
+                    }
+                  }}
+                  aria-label={
+                    active && isPlaying ? `Pause ${label}` : `Play ${label}`
+                  }
                 >
                   <span className={styles.playIcon}>
                     {active && isPlaying ? "⏸" : "▶"}

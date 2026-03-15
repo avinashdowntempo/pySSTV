@@ -92,6 +92,7 @@ export default function App() {
             currentUrl={audioState.currentUrl}
             isPlaying={audioState.isPlaying}
             onPlay={audioControls.play}
+            onPause={audioControls.pause}
           />
         </div>
 
