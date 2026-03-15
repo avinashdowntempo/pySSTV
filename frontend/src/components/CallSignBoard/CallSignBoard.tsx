@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { BoardEntry, CallSignInfo } from "../../types";
-import { lookupCallSign, checkinCallSign, fetchBoard } from "../../api/callsign";
+import {
+  lookupCallSign,
+  checkinCallSign,
+  fetchBoard,
+} from "../../api/callsign";
 import styles from "./CallSignBoard.module.css";
 
 export function CallSignBoard() {
@@ -98,9 +102,7 @@ export function CallSignBoard() {
               <span className={styles.classBadge}>
                 {entry.operClass || "—"}
               </span>
-              <span className={styles.grid}>
-                {entry.gridsquare || "—"}
-              </span>
+              <span className={styles.grid}>{entry.gridsquare || "—"}</span>
             </div>
           ))
         )}
@@ -148,9 +150,7 @@ export function CallSignBoard() {
             <div className={styles.modalTitle}>Confirm Check-In</div>
             <div className={styles.infoGrid}>
               <span className={styles.infoLabel}>Call Sign</span>
-              <span className={styles.infoValue}>
-                {pendingInfo.callsign}
-              </span>
+              <span className={styles.infoValue}>{pendingInfo.callsign}</span>
               <span className={styles.infoLabel}>Name</span>
               <span className={styles.infoValue}>{pendingInfo.name}</span>
               <span className={styles.infoLabel}>Type</span>
