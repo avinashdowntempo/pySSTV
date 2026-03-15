@@ -33,3 +33,9 @@ export async function fetchBoard(
   if (!res.ok) throw new Error("Failed to fetch board");
   return res.json();
 }
+
+export async function seedBoard(): Promise<{ inserted: number }> {
+  const res = await fetch(`${BASE}/callsign/seed`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to seed board");
+  return res.json();
+}

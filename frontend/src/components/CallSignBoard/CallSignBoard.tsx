@@ -4,8 +4,27 @@ import {
   lookupCallSign,
   checkinCallSign,
   fetchBoard,
+  seedBoard,
 } from "../../api/callsign";
+import { TickerView } from "./TickerView";
+import { MarqueeView } from "./MarqueeView";
+import { FlipBoardView } from "./FlipBoardView";
 import styles from "./CallSignBoard.module.css";
+
+type ViewMode = "list" | "ticker" | "marquee" | "flip";
+
+const VIEW_LABELS: Record<ViewMode, string> = {
+  list: "▤ List",
+  ticker: "▼ Ticker",
+  marquee: "◀ Marquee",
+  flip: "⊞ Flip",
+};
+
+function getInitialViewMode(): ViewMode {
+  const stored = localStorage.getItem("boardViewMode");
+  if (stored && stored in VIEW_LABELS) return stored as ViewMode;
+  return "list";
+}
 
 export function CallSignBoard() {
   const [entries, setEntries] = useState<BoardEntry[]>([]);
@@ -13,7 +32,13 @@ export function CallSignBoard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [pendingInfo, setPendingInfo] = useState<CallSignInfo | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>(getInitialViewMode);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const changeViewMode = useCallback((mode: ViewMode) => {
+    setViewMode(mode);
+    localStorage.setItem("boardViewMode", mode);
+  }, []);
 
   // Load board on mount
   useEffect(() => {
@@ -68,45 +93,74 @@ export function CallSignBoard() {
       {/* Header */}
       <div className={styles.boardHeader}>
         <span className={styles.boardTitle}>📡 Operator Board</span>
-        <span className={styles.liveIndicator}>
-          <span className={styles.liveDot} />
-          Live
-        </span>
-      </div>
-
-      {/* Column headers */}
-      <div className={styles.colHeaders} role="row">
-        <span className={styles.colLabel}>Call Sign</span>
-        <span className={styles.colLabel}>Operator</span>
-        <span className={styles.colLabel}>Class</span>
-        <span className={styles.colLabel}>Grid</span>
-      </div>
-
-      {/* Rows */}
-      <div className={styles.rows} role="list">
-        {entries.length === 0 ? (
-          <div className={styles.empty}>
-            No operators checked in yet — be the first!
+        <div className={styles.headerRight}>
+          <div
+            className={styles.viewToggle}
+            role="tablist"
+            aria-label="Board view mode"
+          >
+            {(Object.keys(VIEW_LABELS) as ViewMode[]).map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                role="tab"
+                aria-selected={viewMode === mode}
+                className={`${styles.viewBtn} ${viewMode === mode ? styles.viewBtnActive : ""}`}
+                onClick={() => changeViewMode(mode)}
+              >
+                {VIEW_LABELS[mode]}
+              </button>
+            ))}
           </div>
-        ) : (
-          entries.map((entry, i) => (
-            <div
-              className={styles.row}
-              role="listitem"
-              key={`${entry.callsign}-${entry.checkedInAt}-${i}`}
-            >
-              <span className={styles.callsign}>{entry.callsign}</span>
-              <span className={styles.name} title={entry.name}>
-                {entry.name}
-              </span>
-              <span className={styles.classBadge}>
-                {entry.operClass || "—"}
-              </span>
-              <span className={styles.grid}>{entry.gridsquare || "—"}</span>
-            </div>
-          ))
-        )}
+          <span className={styles.liveIndicator}>
+            <span className={styles.liveDot} />
+            Live
+          </span>
+        </div>
       </div>
+
+      {/* Dynamic view */}
+      {viewMode === "list" && (
+        <>
+          {/* Column headers */}
+          <div className={styles.colHeaders} role="row">
+            <span className={styles.colLabel}>Call Sign</span>
+            <span className={styles.colLabel}>Operator</span>
+            <span className={styles.colLabel}>Class</span>
+            <span className={styles.colLabel}>Grid</span>
+          </div>
+
+          {/* Rows */}
+          <div className={styles.rows} role="list">
+            {entries.length === 0 ? (
+              <div className={styles.empty}>
+                No operators checked in yet — be the first!
+              </div>
+            ) : (
+              entries.map((entry, i) => (
+                <div
+                  className={styles.row}
+                  role="listitem"
+                  key={`${entry.callsign}-${entry.checkedInAt}-${i}`}
+                >
+                  <span className={styles.callsign}>{entry.callsign}</span>
+                  <span className={styles.name} title={entry.name}>
+                    {entry.name}
+                  </span>
+                  <span className={styles.classBadge}>
+                    {entry.operClass || "—"}
+                  </span>
+                  <span className={styles.grid}>{entry.gridsquare || "—"}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </>
+      )}
+
+      {viewMode === "ticker" && <TickerView entries={entries} />}
+      {viewMode === "marquee" && <MarqueeView entries={entries} />}
+      {viewMode === "flip" && <FlipBoardView entries={entries} />}
 
       {/* Check-in input */}
       <div className={styles.checkinRow}>
@@ -131,6 +185,18 @@ export function CallSignBoard() {
           disabled={loading || !input.trim()}
         >
           {loading ? "…" : "Check In"}
+        </button>
+        <button
+          type="button"
+          className={styles.seedBtn}
+          onClick={async () => {
+            await seedBoard();
+            const data = await fetchBoard(50);
+            setEntries(data.entries);
+          }}
+          title="Load dummy test data"
+        >
+          Seed
         </button>
       </div>
       {error && <div className={styles.error}>{error}</div>}

@@ -143,3 +143,56 @@ def board() -> Response:
         for r in rows
     ]
     return jsonify({"entries": entries})
+
+
+_DUMMY_OPERATORS = [
+    ("W1AW", "ARRL HQ Station", "E", "FN31pr"),
+    ("K3LR", "Tim Duffy", "E", "EN91jk"),
+    ("N1MM", "Tom Wagner", "E", "FN31"),
+    ("W6YX", "Stanford ARC", "E", "CM87wj"),
+    ("K1TTT", "Dave Robbins", "E", "FN32ll"),
+    ("W0AIH", "Bob Naumann", "E", "EN34"),
+    ("VE3AT", "Allen Wootton", "E", "FN03"),
+    ("K5ZD", "Randy Thompson", "E", "FN42"),
+    ("W2RQ", "Bob Wilson", "E", "FN30"),
+    ("N6MJ", "Dennis Motschenbacher", "E", "CM97"),
+    ("K9CT", "Craig Thompson", "E", "EN50"),
+    ("W4KFC", "Joe Miller", "G", "EM75"),
+    ("KG7HF", "Sarah Chen", "T", "CN87"),
+    ("N0AX", "Ward Silver", "E", "EN13"),
+    ("K4ZW", "Danny White", "G", "FM08"),
+    ("W7RN", "Mike Mertel", "E", "DM09"),
+    ("VE7CC", "Lee Sawkins", "E", "CN89"),
+    ("KH6LC", "Lloyd Cabral", "E", "BL01"),
+    ("W8JI", "Tom Rauch", "E", "EM72"),
+    ("K2MK", "Mark Kellner", "G", "FN20"),
+    ("N3BB", "Jim George", "E", "EL09"),
+    ("W5WMU", "Mack McCormick", "E", "EM31"),
+    ("KD9OQK", "Alex Rivera", "T", "EN52"),
+    ("AG7TX", "Emily Park", "G", "DN17"),
+]
+
+
+@callsign_bp.route("/callsign/seed", methods=["POST"])
+def seed() -> Response | tuple[Response, int]:
+    """Insert dummy operators for testing. Skips duplicates."""
+    db = _get_db()
+    inserted = 0
+    try:
+        now = time.time()
+        for i, (cs, name, oper, grid) in enumerate(_DUMMY_OPERATORS):
+            exists = db.execute(
+                "SELECT 1 FROM checkins WHERE callsign = ?", (cs,)
+            ).fetchone()
+            if exists:
+                continue
+            db.execute(
+                "INSERT INTO checkins (callsign, name, oper_class, gridsquare, checked_in_at) VALUES (?, ?, ?, ?, ?)",
+                (cs, name, oper, grid, now - (len(_DUMMY_OPERATORS) - i) * 60),
+            )
+            inserted += 1
+        db.commit()
+    finally:
+        db.close()
+
+    return jsonify({"ok": True, "inserted": inserted})
