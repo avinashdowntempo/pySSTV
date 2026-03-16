@@ -10,6 +10,7 @@ import { RadioWaves } from "./components/RadioWaves";
 import { InstallBanner } from "./components/InstallBanner";
 import { NavBoardBadge } from "./components/CallSignBoard/NavBoardBadge";
 import { CallSignBoard } from "./components/CallSignBoard";
+import { ClubBadge } from "./components/ClubBadge";
 import styles from "./App.module.css";
 
 export default function App() {
@@ -107,6 +108,8 @@ export default function App() {
         <div id="operator-board">
           <CallSignBoard />
         </div>
+
+        <ClubBadge />
       </main>
 
       <footer className={styles.playerSticky} role="contentinfo">
