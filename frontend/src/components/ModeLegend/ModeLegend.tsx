@@ -39,7 +39,8 @@ export default function ModeLegend({ selectedMode }: Props) {
             <span>Aspect Ratio</span>
           </div>
           {Object.entries(MODE_INFO).map(([mode, { width, height }]) => {
-            const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
+            const gcd = (a: number, b: number): number =>
+              b ? gcd(b, a % b) : a;
             const d = gcd(width, height);
             return (
               <div

@@ -62,12 +62,16 @@ export default function CropEditor({
             onCropChange={setCrop}
             onZoomChange={setZoom}
             onCropComplete={onCropComplete}
-            initialCroppedAreaPixels={initialCrop ? {
-              x: initialCrop.x,
-              y: initialCrop.y,
-              width: initialCrop.width,
-              height: initialCrop.height,
-            } : undefined}
+            initialCroppedAreaPixels={
+              initialCrop
+                ? {
+                    x: initialCrop.x,
+                    y: initialCrop.y,
+                    width: initialCrop.width,
+                    height: initialCrop.height,
+                  }
+                : undefined
+            }
           />
         </div>
 
@@ -87,11 +91,7 @@ export default function CropEditor({
         </div>
 
         <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.cancelBtn}
-            onClick={onCancel}
-          >
+          <button type="button" className={styles.cancelBtn} onClick={onCancel}>
             Cancel
           </button>
           <button

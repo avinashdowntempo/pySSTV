@@ -58,10 +58,7 @@ export default function UploadForm({ onSubmit }: Props) {
     setEntries((prev) => {
       const remaining = MAX_FILES - prev.length;
       if (remaining <= 0) return prev;
-      return [
-        ...prev,
-        ...valid.slice(0, remaining).map((file) => ({ file })),
-      ];
+      return [...prev, ...valid.slice(0, remaining).map((file) => ({ file }))];
     });
   }, []);
 
@@ -104,9 +101,7 @@ export default function UploadForm({ onSubmit }: Props) {
 
   const handleResetCrop = useCallback((index: number) => {
     setEntries((prev) =>
-      prev.map((e, i) =>
-        i === index ? { file: e.file } : e,
-      ),
+      prev.map((e, i) => (i === index ? { file: e.file } : e)),
     );
   }, []);
 

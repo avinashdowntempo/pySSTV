@@ -14,7 +14,11 @@ interface Props {
   readonly onPlay: (url: string) => void;
   readonly onRemove: (id: string) => void;
   readonly onClearCompleted: () => void;
-  readonly onRecrop: (id: string, croppedFile: File, cropData: CropArea) => void;
+  readonly onRecrop: (
+    id: string,
+    croppedFile: File,
+    cropData: CropArea,
+  ) => void;
   readonly onResetCrop: (id: string) => void;
 }
 
@@ -144,7 +148,7 @@ export default function BatchList({
   const [cropJobId, setCropJobId] = useState<string | null>(null);
 
   const cropJob = cropJobId
-    ? jobs.find((j) => j.id === cropJobId) ?? null
+    ? (jobs.find((j) => j.id === cropJobId) ?? null)
     : null;
 
   // Stable object URL for the crop editor (original file)
