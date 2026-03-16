@@ -1,3 +1,44 @@
+.wrapper {
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.signoff {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.signoffLine {
+  flex: 0 1 80px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.25) 100%
+  );
+}
+
+.signoffLine:last-child {
+  background: linear-gradient(
+    90deg,
+    rgba(56, 189, 248, 0.25) 0%,
+    transparent 100%
+  );
+}
+
+.signoffText {
+  font-family: "VT323", monospace;
+  font-size: 1.1rem;
+  color: #38bdf8;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+  user-select: none;
+}
+
 .shield {
   display: flex;
   flex-direction: column;
