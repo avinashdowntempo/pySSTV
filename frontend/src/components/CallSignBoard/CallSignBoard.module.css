@@ -1,9 +1,30 @@
 .board {
-  background: #0c0e13;
-  border: 1px solid #1e2330;
+  background: #07090d;
+  border: 1px solid #1a2535;
   border-radius: 12px;
   padding: 1rem;
   overflow: hidden;
+  box-shadow:
+    inset 0 1px 40px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(100, 210, 255, 0.04);
+  position: relative;
+}
+
+/* Faint CRT scanline overlay */
+.board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  z-index: 1;
 }
 
 /* Header bar */
@@ -23,31 +44,36 @@
 }
 
 .boardTitle {
-  font-family: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-family: "VT323", monospace;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #f0b429;
+  color: #7dd3fc;
+  text-shadow:
+    0 0 8px rgba(125, 211, 252, 0.6),
+    0 0 20px rgba(125, 211, 252, 0.25);
 }
 
 .liveIndicator {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.62rem;
-  font-weight: 600;
+  font-family: "VT323", monospace;
+  font-size: 0.95rem;
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #22c55e;
+  color: #38bdf8;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
 }
 
 .liveDot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #22c55e;
+  background: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -67,17 +93,18 @@
   grid-template-columns: 100px 1fr 80px 80px;
   gap: 0.5rem;
   padding: 0.35rem 0.5rem;
-  border-bottom: 1px solid #1e2330;
+  border-bottom: 1px solid #0f1a2a;
   margin-bottom: 0.25rem;
 }
 
 .colLabel {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.58rem;
-  font-weight: 600;
+  font-family: "VT323", monospace;
+  font-size: 0.9rem;
+  font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: #475569;
+  text-shadow: 0 0 4px rgba(100, 180, 255, 0.15);
 }
 
 /* Scrollable row area */
@@ -100,7 +127,7 @@
 }
 
 .row:hover {
-  background: rgba(240, 180, 41, 0.06);
+  background: rgba(56, 189, 248, 0.05);
 }
 
 @keyframes slideIn {
@@ -114,20 +141,24 @@
   }
 }
 
-/* Call sign cell — amber text */
+/* Call sign cell — glowing VFD cyan */
 .callsign {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #f0b429;
-  letter-spacing: 0.06em;
+  font-family: "VT323", monospace;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #7dd3fc;
+  letter-spacing: 0.08em;
+  text-shadow:
+    0 0 8px rgba(125, 211, 252, 0.6),
+    0 0 20px rgba(125, 211, 252, 0.2);
 }
 
 /* Operator name */
 .name {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  color: #e5e7eb;
+  font-family: "VT323", monospace;
+  font-size: 1.05rem;
+  color: #94a3b8;
+  text-shadow: 0 0 4px rgba(148, 163, 184, 0.2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -135,40 +166,44 @@
 
 /* Class badge */
 .classBadge {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.62rem;
-  font-weight: 600;
-  color: #22c55e;
+  font-family: "VT323", monospace;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #38bdf8;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   display: flex;
   align-items: center;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
 }
 
 /* Grid square */
 .grid {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem;
-  color: #9ca3af;
+  font-family: "VT323", monospace;
+  font-size: 1rem;
+  color: #64748b;
   display: flex;
   align-items: center;
+  text-shadow: 0 0 4px rgba(100, 116, 139, 0.2);
 }
 
 /* Time cell */
 .time {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.62rem;
-  color: #6b7280;
+  font-family: "VT323", monospace;
+  font-size: 0.95rem;
+  color: #475569;
+  text-shadow: 0 0 4px rgba(71, 85, 105, 0.2);
 }
 
 /* Empty state */
 .empty {
   text-align: center;
   padding: 1.5rem 0.5rem;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  color: #4b5563;
-  letter-spacing: 0.04em;
+  font-family: "VT323", monospace;
+  font-size: 1.1rem;
+  color: #475569;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 4px rgba(71, 85, 105, 0.3);
 }
 
 /* Check-in input section */
@@ -178,56 +213,63 @@
   gap: 0.5rem;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #1e2330;
+  border-top: 1px solid #0f1a2a;
 }
 
 .callInput {
   flex: 1;
   min-width: 0;
   padding: 0.4rem 0.6rem;
-  border: 1px solid #1e2330;
+  border: 1px solid #1a2535;
   border-radius: 6px;
-  background: #161923;
-  color: #f0b429;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  background: #0a0f18;
+  color: #7dd3fc;
+  font-family: "VT323", monospace;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   outline: none;
   transition: border-color 0.15s;
+  text-shadow: 0 0 6px rgba(125, 211, 252, 0.4);
 }
 
 .callInput::placeholder {
-  color: #4b5563;
+  color: #334155;
   text-transform: none;
   font-weight: 400;
   letter-spacing: normal;
+  text-shadow: none;
 }
 
 .callInput:focus {
-  border-color: #f0b429;
+  border-color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
 }
 
 .checkinBtn {
   padding: 0.4rem 0.85rem;
-  border: 1.5px solid #f0b429;
+  border: 1.5px solid #38bdf8;
   border-radius: 6px;
   background: transparent;
-  color: #f0b429;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  font-weight: 600;
+  color: #38bdf8;
+  font-family: "VT323", monospace;
+  font-size: 1.05rem;
+  font-weight: 400;
   cursor: pointer;
   transition:
     background 0.15s,
-    color 0.15s;
+    color 0.15s,
+    box-shadow 0.15s;
   white-space: nowrap;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
 }
 
 .checkinBtn:hover:not(:disabled) {
-  background: #f0b429;
-  color: #0c0e13;
+  background: #38bdf8;
+  color: #07090d;
+  text-shadow: none;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
 }
 
 .checkinBtn:disabled {
@@ -236,10 +278,11 @@
 }
 
 .error {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.65rem;
-  color: #ef4444;
+  font-family: "VT323", monospace;
+  font-size: 1rem;
+  color: #f87171;
   margin-top: 0.35rem;
+  text-shadow: 0 0 6px rgba(248, 113, 113, 0.4);
 }
 
 /* ---- Confirm modal overlay ---- */
@@ -262,43 +305,48 @@
 }
 
 .modal {
-  background: #161923;
-  border: 1px solid #1e2330;
+  background: #0a0f18;
+  border: 1px solid #1a2535;
   border-radius: 12px;
   padding: 1.5rem;
   width: min(400px, 90vw);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(56, 189, 248, 0.06);
 }
 
 .modalTitle {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #f0b429;
+  font-family: "VT323", monospace;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #7dd3fc;
   margin-bottom: 1rem;
   text-align: center;
+  text-shadow: 0 0 8px rgba(125, 211, 252, 0.5);
 }
 
 .infoGrid {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.3rem 0.75rem;
+  gap: 0.4rem 1rem;
   margin-bottom: 1.25rem;
 }
 
 .infoLabel {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: #6b7280;
+  font-family: "VT323", monospace;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #475569;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  text-shadow: 0 0 4px rgba(71, 85, 105, 0.2);
 }
 
 .infoValue {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  color: #e5e7eb;
+  font-family: "VT323", monospace;
+  font-size: 1.1rem;
+  color: #94a3b8;
+  text-shadow: 0 0 4px rgba(148, 163, 184, 0.2);
 }
 
 .modalActions {
@@ -308,31 +356,34 @@
 }
 
 .confirmBtn {
-  padding: 0.45rem 1.2rem;
+  padding: 0.5rem 1.4rem;
   border: none;
   border-radius: 6px;
-  background: #f0b429;
-  color: #0c0e13;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
+  background: #38bdf8;
+  color: #07090d;
+  font-family: "VT323", monospace;
+  font-size: 1.15rem;
+  font-weight: 400;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition:
+    opacity 0.15s,
+    box-shadow 0.15s;
 }
 
 .confirmBtn:hover {
-  opacity: 0.85;
+  opacity: 0.9;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
 }
 
 .cancelBtn {
-  padding: 0.45rem 1.2rem;
-  border: 1px solid #374151;
+  padding: 0.5rem 1.4rem;
+  border: 1px solid #1e293b;
   border-radius: 6px;
   background: transparent;
-  color: #9ca3af;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  font-weight: 600;
+  color: #64748b;
+  font-family: "VT323", monospace;
+  font-size: 1.15rem;
+  font-weight: 400;
   cursor: pointer;
   transition:
     background 0.15s,
@@ -340,16 +391,16 @@
 }
 
 .cancelBtn:hover {
-  background: #1e2330;
-  color: #e5e7eb;
+  background: #0f172a;
+  color: #94a3b8;
 }
 
 /* ---- View mode toggle ---- */
 .viewToggle {
   display: flex;
   gap: 2px;
-  background: #161923;
-  border: 1px solid #1e2330;
+  background: #0a0f18;
+  border: 1px solid #1a2535;
   border-radius: 6px;
   padding: 2px;
 }
@@ -359,10 +410,10 @@
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: #6b7280;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.58rem;
-  font-weight: 600;
+  color: #475569;
+  font-family: "VT323", monospace;
+  font-size: 0.9rem;
+  font-weight: 400;
   cursor: pointer;
   transition:
     background 0.15s,
@@ -371,28 +422,28 @@
 }
 
 .viewBtn:hover {
-  color: #9ca3af;
+  color: #7dd3fc;
 }
 
 .viewBtnActive {
-  background: #f0b429;
-  color: #0c0e13;
+  background: #38bdf8;
+  color: #07090d;
 }
 
 .viewBtnActive:hover {
-  color: #0c0e13;
+  color: #07090d;
 }
 
 /* ---- Seed button ---- */
 .seedBtn {
   padding: 0.4rem 0.65rem;
-  border: 1px dashed #374151;
+  border: 1px dashed #1e293b;
   border-radius: 6px;
   background: transparent;
-  color: #6b7280;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.65rem;
-  font-weight: 600;
+  color: #475569;
+  font-family: "VT323", monospace;
+  font-size: 1.05rem;
+  font-weight: 400;
   cursor: pointer;
   transition:
     border-color 0.15s,
@@ -401,8 +452,9 @@
 }
 
 .seedBtn:hover {
-  border-color: #f0b429;
-  color: #f0b429;
+  border-color: #38bdf8;
+  color: #38bdf8;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.3);
 }
 
 /* ---- Ticker view (vertical auto-scroll) ---- */
@@ -422,7 +474,7 @@
 }
 
 .tickerRow:hover {
-  background: rgba(240, 180, 41, 0.06);
+  background: rgba(56, 189, 248, 0.05);
 }
 
 /* ---- Marquee view (horizontal crawl) ---- */
@@ -475,14 +527,15 @@
 }
 
 .marqueeOp {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem;
-  color: #9ca3af;
+  font-family: "VT323", monospace;
+  font-size: 1.05rem;
+  color: #7dd3fc;
+  text-shadow: 0 0 6px rgba(125, 211, 252, 0.3);
 }
 
 .marqueeSep {
   font-size: 0.5rem;
-  color: #374151;
+  color: #1e293b;
 }
 
 /* ---- Flip board view (paginated) ---- */
@@ -517,7 +570,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  border: 1.5px solid #374151;
+  border: 1.5px solid #1e293b;
   background: transparent;
   padding: 0;
   cursor: pointer;
@@ -527,12 +580,13 @@
 }
 
 .flipDot:hover {
-  border-color: #f0b429;
+  border-color: #38bdf8;
 }
 
 .flipDotActive {
-  background: #f0b429;
-  border-color: #f0b429;
+  background: #38bdf8;
+  border-color: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
 }
 
 /* Responsive — stack on narrow screens */

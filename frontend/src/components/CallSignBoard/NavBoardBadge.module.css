@@ -3,34 +3,38 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.3rem 0.7rem;
-  border: 1.5px solid #f0b429;
+  border: 1.5px solid #38bdf8;
   border-radius: 999px;
   background: transparent;
-  color: #f0b429;
-  font-family: "JetBrains Mono", "Fira Code", monospace;
-  font-size: 0.72rem;
-  font-weight: 600;
+  color: #7dd3fc;
+  font-family: "VT323", monospace;
+  font-size: 0.88rem;
+  font-weight: 400;
   cursor: pointer;
   white-space: nowrap;
+  text-shadow: 0 0 6px rgba(125, 211, 252, 0.4);
   transition:
     background 0.2s,
-    color 0.2s;
+    color 0.2s,
+    text-shadow 0.2s;
 }
 
 .badge:hover {
-  background: #f0b429;
-  color: #0c0e13;
+  background: #38bdf8;
+  color: #07090d;
+  text-shadow: none;
 }
 
 .badge:hover .dot {
-  background: #0c0e13;
+  background: #07090d;
 }
 
 .dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #22c55e;
+  background: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
   flex-shrink: 0;
   animation: pulse 2s ease-in-out infinite;
 }
@@ -69,14 +73,14 @@
   height: 1.1rem;
   padding: 0 0.25rem;
   border-radius: 999px;
-  background: rgba(240, 180, 41, 0.2);
+  background: rgba(56, 189, 248, 0.15);
   font-size: 0.58rem;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1;
 }
 
 .badge:hover .count {
-  background: rgba(12, 14, 19, 0.2);
+  background: rgba(7, 9, 13, 0.2);
 }
 
 .chevron {

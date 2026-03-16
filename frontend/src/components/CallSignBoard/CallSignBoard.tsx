@@ -241,10 +241,11 @@ export function CallSignBoard() {
             <p
               style={{
                 textAlign: "center",
-                fontSize: "0.72rem",
-                color: "#9ca3af",
+                fontSize: "1.15rem",
+                color: "#64748b",
                 marginBottom: "1rem",
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"VT323", monospace',
+                textShadow: "0 0 4px rgba(100, 116, 139, 0.3)",
               }}
             >
               Is this you?
