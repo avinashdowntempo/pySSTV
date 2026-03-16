@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
-import type { ConversionJob } from "../../types";
+import type { ConversionJob, CropArea } from "../../types";
 import type { AudioPlayerState } from "../../hooks/useAudioPlayer";
+import { MODE_INFO } from "../../constants/modes";
+import { cropImageFile } from "../../utils/cropImage";
 import { downloadWav } from "../../api/sstv";
+import { CropEditor } from "../CropEditor";
 import styles from "./BatchList.module.css";
 
 interface Props {
@@ -11,6 +14,8 @@ interface Props {
   readonly onPlay: (url: string) => void;
   readonly onRemove: (id: string) => void;
   readonly onClearCompleted: () => void;
+  readonly onRecrop: (id: string, croppedFile: File, cropData: CropArea) => void;
+  readonly onResetCrop: (id: string) => void;
 }
 
 function formatBytes(bytes: number) {
@@ -133,7 +138,34 @@ export default function BatchList({
   onPlay,
   onRemove,
   onClearCompleted,
+  onRecrop,
+  onResetCrop,
 }: Props) {
+  const [cropJobId, setCropJobId] = useState<string | null>(null);
+
+  const cropJob = cropJobId
+    ? jobs.find((j) => j.id === cropJobId) ?? null
+    : null;
+
+  // Stable object URL for the crop editor (original file)
+  const cropImageUrl = useMemo(() => {
+    if (!cropJob) return "";
+    return URL.createObjectURL(cropJob.originalFile);
+  }, [cropJob]);
+
+  useEffect(() => {
+    return () => {
+      if (cropImageUrl) URL.revokeObjectURL(cropImageUrl);
+    };
+  }, [cropImageUrl]);
+
+  const handleCropApply = async (area: CropArea) => {
+    if (!cropJob) return;
+    const croppedFile = await cropImageFile(cropJob.originalFile, area);
+    onRecrop(cropJob.id, croppedFile, area);
+    setCropJobId(null);
+  };
+
   if (jobs.length === 0) {
     return (
       <div className={styles.empty}>
@@ -145,6 +177,14 @@ export default function BatchList({
   const hasCompleted = jobs.some(
     (j) => j.status === "done" || j.status === "error",
   );
+
+  const cropAspect = cropJob
+    ? (() => {
+        const info = MODE_INFO[cropJob.mode];
+        return info ? info.width / info.height : 4 / 3;
+      })()
+    : 4 / 3;
+  const cropModeInfo = cropJob ? MODE_INFO[cropJob.mode] : undefined;
 
   return (
     <section
@@ -167,6 +207,7 @@ export default function BatchList({
       {jobs.map((job) => {
         const isActive =
           job.status === "done" && job.audioUrl === audioState.currentUrl;
+        const isCropped = !!job.cropData;
 
         return (
           <div
@@ -196,6 +237,11 @@ export default function BatchList({
               <div className={styles.fileName}>{job.file.name}</div>
               <div className={styles.meta}>
                 {job.mode}
+                <span
+                  className={`${styles.cropTag} ${isCropped ? styles.cropTagCropped : styles.cropTagFit}`}
+                >
+                  {isCropped ? "✂ CROP" : "⤢ FIT"}
+                </span>
                 {job.error ? ` · ${job.error}` : ""}
               </div>
             </div>
@@ -212,6 +258,30 @@ export default function BatchList({
             </span>
 
             <div className={styles.actions}>
+              {/* Crop / Reset buttons for done or error jobs */}
+              {(job.status === "done" || job.status === "error") && (
+                <div
+                  className={styles.cropGroup}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    className={styles.cropActionBtn}
+                    title={isCropped ? "Re-crop image" : "Crop image"}
+                    onClick={() => setCropJobId(job.id)}
+                  >
+                    ✂️
+                  </button>
+                  {isCropped && (
+                    <button
+                      className={styles.cropActionBtn}
+                      title="Reset to fit (re-converts)"
+                      onClick={() => onResetCrop(job.id)}
+                    >
+                      ↩
+                    </button>
+                  )}
+                </div>
+              )}
               {job.status === "done" && <DownloadButtons job={job} />}
               <button
                 className={styles.iconBtn}
@@ -227,6 +297,20 @@ export default function BatchList({
           </div>
         );
       })}
+
+      {/* Crop editor modal — only one at a time */}
+      {cropJob && cropImageUrl && (
+        <CropEditor
+          imageUrl={cropImageUrl}
+          aspect={cropAspect}
+          modeName={cropJob.mode}
+          modeWidth={cropModeInfo?.width ?? 320}
+          modeHeight={cropModeInfo?.height ?? 256}
+          initialCrop={cropJob.cropData}
+          onApply={handleCropApply}
+          onCancel={() => setCropJobId(null)}
+        />
+      )}
     </section>
   );
 }

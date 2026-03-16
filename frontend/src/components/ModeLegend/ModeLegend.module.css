@@ -47,7 +47,8 @@
 
 .row {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 2fr 1.5fr 1fr;
+  align-items: center;
   padding: 0.35rem 0.75rem;
   border-bottom: 1px solid var(--border);
 }
@@ -77,4 +78,11 @@
 .resolution {
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.aspectRatio {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }

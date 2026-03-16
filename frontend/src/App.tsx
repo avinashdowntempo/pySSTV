@@ -15,7 +15,8 @@ import styles from "./App.module.css";
 
 export default function App() {
   const [audioState, audioControls] = useAudioPlayer();
-  const { jobs, addJobs, removeJob, clearCompleted } = useConversionQueue();
+  const { jobs, addJobs, removeJob, clearCompleted, recropJob, resetJobCrop } =
+    useConversionQueue();
   const [page, setPage] = useState<"home" | "guide">("home");
 
   const handleNext = useCallback(() => {
@@ -103,6 +104,8 @@ export default function App() {
           onPlay={audioControls.play}
           onRemove={removeJob}
           onClearCompleted={clearCompleted}
+          onRecrop={recropJob}
+          onResetCrop={resetJobCrop}
         />
 
         <div id="operator-board">

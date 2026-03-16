@@ -1,10 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { fetchModes } from "../../api/sstv";
+import { MODE_INFO } from "../../constants/modes";
+import { cropImageFile } from "../../utils/cropImage";
+import type { CropArea } from "../../types";
+import { CropEditor } from "../CropEditor";
 import { ModeLegend } from "../ModeLegend";
 import styles from "./UploadForm.module.css";
 
+interface FileEntry {
+  file: File;
+  cropData?: CropArea;
+}
+
 interface Props {
-  readonly onSubmit: (files: File[], mode: string) => void;
+  readonly onSubmit: (
+    entries: { file: File; originalFile: File; cropData?: CropArea }[],
+    mode: string,
+  ) => void;
 }
 
 const ACCEPTED =
@@ -14,8 +26,10 @@ const MAX_FILES = 10;
 export default function UploadForm({ onSubmit }: Props) {
   const [modes, setModes] = useState<string[]>([]);
   const [selectedMode, setSelectedMode] = useState("MartinM1");
-  const [files, setFiles] = useState<File[]>([]);
+  const [entries, setEntries] = useState<FileEntry[]>([]);
   const [dragOver, setDragOver] = useState(false);
+  const [cropIndex, setCropIndex] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -29,8 +43,8 @@ export default function UploadForm({ onSubmit }: Props) {
 
   // Create stable object URLs for thumbnails, revoke on cleanup
   const previews = useMemo(
-    () => files.map((f) => URL.createObjectURL(f)),
-    [files],
+    () => entries.map((e) => URL.createObjectURL(e.file)),
+    [entries],
   );
   useEffect(() => {
     return () => previews.forEach((url) => URL.revokeObjectURL(url));
@@ -41,16 +55,23 @@ export default function UploadForm({ onSubmit }: Props) {
     const valid = Array.from(incoming).filter((f) =>
       f.type.startsWith("image/"),
     );
-    setFiles((prev) => {
+    setEntries((prev) => {
       const remaining = MAX_FILES - prev.length;
       if (remaining <= 0) return prev;
-      return [...prev, ...valid.slice(0, remaining)];
+      return [
+        ...prev,
+        ...valid.slice(0, remaining).map((file) => ({ file })),
+      ];
     });
   }, []);
 
-  const removeFile = useCallback((index: number) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
-  }, []);
+  const removeFile = useCallback(
+    (index: number) => {
+      if (cropIndex === index) setCropIndex(null);
+      setEntries((prev) => prev.filter((_, i) => i !== index));
+    },
+    [cropIndex],
+  );
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -61,14 +82,65 @@ export default function UploadForm({ onSubmit }: Props) {
     [addFiles],
   );
 
-  const handleSubmit = () => {
-    if (files.length === 0) return;
-    onSubmit(files, selectedMode);
-    setFiles([]);
-    if (inputRef.current) inputRef.current.value = "";
+  // Reset crop data when mode changes (aspect ratio changes)
+  const handleModeChange = useCallback((mode: string) => {
+    setSelectedMode(mode);
+    setCropIndex(null);
+    setEntries((prev) => prev.map((e) => ({ file: e.file })));
+  }, []);
+
+  const handleCropApply = useCallback(
+    (croppedArea: CropArea) => {
+      if (cropIndex === null) return;
+      setEntries((prev) =>
+        prev.map((e, i) =>
+          i === cropIndex ? { ...e, cropData: croppedArea } : e,
+        ),
+      );
+      setCropIndex(null);
+    },
+    [cropIndex],
+  );
+
+  const handleResetCrop = useCallback((index: number) => {
+    setEntries((prev) =>
+      prev.map((e, i) =>
+        i === index ? { file: e.file } : e,
+      ),
+    );
+  }, []);
+
+  const handleSubmit = async () => {
+    if (entries.length === 0 || submitting) return;
+    setSubmitting(true);
+
+    try {
+      const processed = await Promise.all(
+        entries.map(async (entry) => {
+          if (entry.cropData) {
+            const croppedFile = await cropImageFile(entry.file, entry.cropData);
+            return {
+              file: croppedFile,
+              originalFile: entry.file,
+              cropData: entry.cropData,
+            };
+          }
+          return { file: entry.file, originalFile: entry.file };
+        }),
+      );
+
+      onSubmit(processed, selectedMode);
+      setEntries([]);
+      setCropIndex(null);
+      if (inputRef.current) inputRef.current.value = "";
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const atLimit = files.length >= MAX_FILES;
+  const atLimit = entries.length >= MAX_FILES;
+  const modeInfo = MODE_INFO[selectedMode];
+  const aspect = modeInfo ? modeInfo.width / modeInfo.height : 4 / 3;
 
   return (
     <div
@@ -110,17 +182,19 @@ export default function UploadForm({ onSubmit }: Props) {
         />
       </button>
 
-      {files.length > 0 && (
+      {entries.length > 0 && (
         <div className={styles.previewSection}>
           <div className={styles.previewHeader}>
             <span className={styles.fileCount}>
-              {files.length} / {MAX_FILES} image{files.length === 1 ? "" : "s"}
+              {entries.length} / {MAX_FILES} image
+              {entries.length === 1 ? "" : "s"}
             </span>
             <button
               type="button"
               className={styles.clearAllBtn}
               onClick={() => {
-                setFiles([]);
+                setEntries([]);
+                setCropIndex(null);
                 if (inputRef.current) inputRef.current.value = "";
               }}
             >
@@ -128,26 +202,56 @@ export default function UploadForm({ onSubmit }: Props) {
             </button>
           </div>
           <div className={styles.thumbGrid}>
-            {files.map((file, i) => (
+            {entries.map((entry, i) => (
               <div
-                key={`${file.name}-${file.size}-${i}`}
+                key={`${entry.file.name}-${entry.file.size}-${i}`}
                 className={styles.thumbCard}
               >
                 <img
                   src={previews[i]}
-                  alt={file.name}
+                  alt={entry.file.name}
                   className={styles.thumbImg}
                 />
+
+                {/* FIT / CROPPED badge */}
+                <span
+                  className={`${styles.cropBadge} ${entry.cropData ? styles.cropBadgeCropped : styles.cropBadgeFit}`}
+                >
+                  {entry.cropData ? "✂ CROP" : "⤢ FIT"}
+                </span>
+
+                {/* Crop / Reset buttons */}
+                <div className={styles.cropActions}>
+                  <button
+                    type="button"
+                    className={styles.cropBtn}
+                    onClick={() => setCropIndex(i)}
+                    title="Crop to mode aspect ratio"
+                  >
+                    ✂️
+                  </button>
+                  {entry.cropData && (
+                    <button
+                      type="button"
+                      className={styles.resetCropBtn}
+                      onClick={() => handleResetCrop(i)}
+                      title="Reset to fit mode"
+                    >
+                      ↩
+                    </button>
+                  )}
+                </div>
+
                 <button
                   type="button"
                   className={styles.removeBtn}
                   onClick={() => removeFile(i)}
-                  aria-label={`Remove ${file.name}`}
+                  aria-label={`Remove ${entry.file.name}`}
                 >
                   ✕
                 </button>
-                <span className={styles.thumbName} title={file.name}>
-                  {file.name}
+                <span className={styles.thumbName} title={entry.file.name}>
+                  {entry.file.name}
                 </span>
               </div>
             ))}
@@ -159,7 +263,7 @@ export default function UploadForm({ onSubmit }: Props) {
         <select
           className={styles.modeSelect}
           value={selectedMode}
-          onChange={(e) => setSelectedMode(e.target.value)}
+          onChange={(e) => handleModeChange(e.target.value)}
           aria-label="SSTV mode"
         >
           {modes.map((m) => (
@@ -171,14 +275,30 @@ export default function UploadForm({ onSubmit }: Props) {
 
         <button
           className={styles.convertBtn}
-          disabled={files.length === 0}
+          disabled={entries.length === 0 || submitting}
           onClick={handleSubmit}
         >
-          Convert {files.length > 1 ? `(${files.length})` : ""}
+          {submitting
+            ? "Processing…"
+            : `Convert ${entries.length > 1 ? `(${entries.length})` : ""}`}
         </button>
       </div>
 
       <ModeLegend selectedMode={selectedMode} />
+
+      {/* Crop editor modal — only one open at a time */}
+      {cropIndex !== null && entries[cropIndex] && (
+        <CropEditor
+          imageUrl={previews[cropIndex]}
+          aspect={aspect}
+          modeName={selectedMode}
+          modeWidth={modeInfo?.width ?? 320}
+          modeHeight={modeInfo?.height ?? 256}
+          initialCrop={entries[cropIndex].cropData}
+          onApply={handleCropApply}
+          onCancel={() => setCropIndex(null)}
+        />
+      )}
     </div>
   );
 }

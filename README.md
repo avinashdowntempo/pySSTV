@@ -221,7 +221,8 @@ A React-based single-page app lives in `frontend/`. It provides a visual interfa
 
 - **Drag-and-drop** (or click-to-browse) multi-image upload with thumbnail previews, per-image remove, and a max of 10 images
 - **Mode picker** — populated from the server's `/modes` endpoint
-- **Mode legend** — inline info hint showing the recommended upload resolution for the selected mode; expands to a full reference table of all 19 modes
+- **Mode legend** — inline info hint showing the recommended upload resolution for the selected mode; expands to a full reference table of all 19 modes with resolution and aspect ratio
+- **Image cropping** — each uploaded image defaults to "Fit" (server resizes to fill the mode's resolution). Click the ✂️ button on any thumbnail to open a crop editor locked to the selected mode's aspect ratio. Drag and zoom to choose your region, then apply. A **⤢ FIT** or **✂ CROP** badge shows the current state. You can re-crop or reset back to fit at any time — both before conversion (in the upload area) and after conversion (in the batch list), which automatically re-converts.
 - **Demo samples** — five pre-converted image/audio pairs so users can preview SSTV output instantly without hitting the server
 - **How-to-use guide** — dedicated page with step-by-step instructions for decoding SSTV audio with Robot36 and other apps, accessible via a visible link in the header
 - **Batch conversion queue** — jobs are processed sequentially; status badges show pending / converting / transmit / error

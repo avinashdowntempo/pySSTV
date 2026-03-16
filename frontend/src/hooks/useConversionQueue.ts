@@ -1,8 +1,14 @@
 import { useCallback, useRef, useState } from "react";
-import type { ConversionJob, ConvertOptions } from "../types";
+import type { ConversionJob, ConvertOptions, CropArea } from "../types";
 import { convertImage } from "../api/sstv";
 
 let nextId = 1;
+
+export interface AddJobEntry {
+  file: File;
+  originalFile: File;
+  cropData?: CropArea;
+}
 
 export function useConversionQueue() {
   const [jobs, setJobs] = useState<ConversionJob[]>([]);
@@ -67,16 +73,74 @@ export function useConversionQueue() {
   }, []);
 
   const addJobs = useCallback(
-    (files: File[], mode: string) => {
-      const newJobs: ConversionJob[] = files.map((file) => ({
+    (entries: AddJobEntry[], mode: string) => {
+      const newJobs: ConversionJob[] = entries.map((entry) => ({
         id: String(nextId++),
-        file,
+        file: entry.file,
+        originalFile: entry.originalFile,
         mode,
+        cropData: entry.cropData,
         status: "pending" as const,
       }));
       const updated = [...queueRef.current, ...newJobs];
       syncRef(updated);
       // Kick off processing
+      setTimeout(processNext, 0);
+    },
+    [processNext],
+  );
+
+  /** Re-queue a completed job with a new cropped file */
+  const recropJob = useCallback(
+    (id: string, croppedFile: File, cropData: CropArea) => {
+      const existing = queueRef.current.find((j) => j.id === id);
+      if (!existing) return;
+      if (existing.audioUrl) URL.revokeObjectURL(existing.audioUrl);
+
+      syncRef(
+        queueRef.current.map((j) =>
+          j.id === id
+            ? {
+                ...j,
+                file: croppedFile,
+                cropData,
+                status: "pending" as const,
+                audioBlob: undefined,
+                audioUrl: undefined,
+                wavSize: undefined,
+                error: undefined,
+              }
+            : j,
+        ),
+      );
+      setTimeout(processNext, 0);
+    },
+    [processNext],
+  );
+
+  /** Reset a job back to fit (original file, no crop) */
+  const resetJobCrop = useCallback(
+    (id: string) => {
+      const existing = queueRef.current.find((j) => j.id === id);
+      if (!existing) return;
+      if (existing.audioUrl) URL.revokeObjectURL(existing.audioUrl);
+
+      syncRef(
+        queueRef.current.map((j) =>
+          j.id === id
+            ? {
+                ...j,
+                file: j.originalFile,
+                cropData: undefined,
+                status: "pending" as const,
+                audioBlob: undefined,
+                audioUrl: undefined,
+                wavSize: undefined,
+                error: undefined,
+              }
+            : j,
+        ),
+      );
       setTimeout(processNext, 0);
     },
     [processNext],
@@ -99,5 +163,5 @@ export function useConversionQueue() {
     );
   }, []);
 
-  return { jobs, addJobs, removeJob, clearCompleted };
+  return { jobs, addJobs, removeJob, clearCompleted, recropJob, resetJobCrop };
 }

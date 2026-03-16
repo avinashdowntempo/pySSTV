@@ -1,12 +1,22 @@
 /** Status of a single conversion job */
 export type JobStatus = "pending" | "converting" | "done" | "error";
 
+/** Pixel-based crop area (from react-easy-crop) */
+export interface CropArea {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 /** A single image-to-WAV conversion job */
 export interface ConversionJob {
   id: string;
   file: File;
+  originalFile: File;
   mode: string;
   status: JobStatus;
+  cropData?: CropArea;
   progress?: number;
   audioBlob?: Blob;
   audioUrl?: string;

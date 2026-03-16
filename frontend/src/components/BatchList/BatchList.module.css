@@ -114,6 +114,54 @@
   margin-top: 2px;
 }
 
+/* Crop tag inline with mode name */
+.cropTag {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.cropTagFit {
+  background: rgba(100, 116, 139, 0.3);
+  color: var(--text-muted);
+}
+
+.cropTagCropped {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+/* Crop action buttons group */
+.cropGroup {
+  display: flex;
+  gap: 2px;
+}
+
+.cropActionBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background 0.15s;
+}
+
+.cropActionBtn:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+}
+
 /* Status badges */
 .badge {
   display: inline-flex;

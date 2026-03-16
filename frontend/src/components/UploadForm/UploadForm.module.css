@@ -123,8 +123,8 @@
 /* ---- Thumbnail Grid ---- */
 .thumbGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.6rem;
 }
 
 .thumbCard {
@@ -149,15 +149,15 @@
 
 .removeBtn {
   position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 1.3rem;
-  height: 1.3rem;
+  top: 4px;
+  right: 4px;
+  width: 1.6rem;
+  height: 1.6rem;
   border-radius: 50%;
   border: none;
   background: rgba(0, 0, 0, 0.55);
   color: #fff;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -179,21 +179,98 @@
 
 .thumbName {
   display: block;
-  padding: 0.2rem 0.3rem;
-  font-size: 0.6rem;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* ---- Mobile: always show remove button ---- */
+/* ---- Crop badge (FIT / CROP) ---- */
+.cropBadge {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 4px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.cropBadgeFit {
+  background: rgba(100, 116, 139, 0.75);
+  color: #e2e8f0;
+}
+
+.cropBadgeCropped {
+  background: rgba(34, 197, 94, 0.8);
+  color: #fff;
+}
+
+/* ---- Crop action buttons ---- */
+.cropActions {
+  position: absolute;
+  bottom: 1.6rem;
+  right: 4px;
+  display: flex;
+  gap: 3px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.thumbCard:hover .cropActions {
+  opacity: 1;
+}
+
+.cropBtn,
+.resetCropBtn {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 5px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.cropBtn {
+  background: rgba(99, 102, 241, 0.8);
+  color: #fff;
+}
+
+.cropBtn:hover {
+  background: rgba(99, 102, 241, 1);
+}
+
+.resetCropBtn {
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+}
+
+.resetCropBtn:hover {
+  background: rgba(239, 68, 68, 0.85);
+}
+
+/* ---- Mobile: always show remove button + crop actions ---- */
 @media (max-width: 480px) {
   .thumbGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .removeBtn {
+    opacity: 1;
+  }
+
+  .cropActions {
     opacity: 1;
   }
 }
